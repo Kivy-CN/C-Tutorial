@@ -112,6 +112,8 @@ Compile 和 Link 这两步骤是针对不同操作系统平台的，生成对应
 
 ### 1.3.4 编译、链接、运行、调试
 
+源代码（source code） → 预处理（preprocessor） → 编译器（compiler） → 汇编程序（assembler） → 目标代码（object code） → 链接器（Linker） → 可执行文件（executables）
+
 编译器读取源代码，编译出来目标文件，再由链接器链接成可执行文件。
 可执行文件就能拿来运行，如果有错误就进行修改，这个过程教易出错，需要调试。
 
@@ -152,7 +154,7 @@ C语言是编译型语言。
 C语言是静态类型语言，速度快。
 Python是动态类型语言，速度慢。
 
-##### 思考题 1 真的是这样么？一直以来都是这样么？各种场景都会这样么？
+##### 思考题 1 同样功能的代码，C语言实现的一定比Python的快么？一直都是这样么？考虑一下版本和不同场景。
 
 ### 1.4.3 跨平台性
 
@@ -164,16 +166,142 @@ C语言编写的程序基本可以运行在任何操作系统上。
 
 工欲善其事必先利其器，先把开发环境构建起来吧。
 
-### 1.5.1 操作系统选择
+### 1.5.1 硬件设备选择
+
+C语言是运行在计算机上的程序语言，所以需要一台计算机。
+低配置的笔记本电脑，或者台式机都可以。
+当然了，要开发高性能需求的应用，或者想有比较好的体验，需要使用高性能的计算机。
+
+C语言支持多种指令集的处理器，
+* 32位处理器：x86、ARM、MIPS
+* 64位处理器：x86_64、ARM64、MIPS64
+
+32位处理器有什么劣势？
++ 32位架构下，最大寻址空间是4GB，这是怎么算出来的？2^32 = 32 Gb = 4GB
++ 当然，后来有了内存地址扩展（PAE，Physical Address Extension）。
+
+1 Byte = 8 bit
+1 KB = 1024 Byte
+1 MB = 1024 KB
+1 GB = 1024 MB
+1 TB = 1024 GB
+1 PB = 1024 TB
+1 EB = 1024 PB
+1 ZB = 1024 EB
+1 YB = 1024 ZB
+
+##### 思考题 2 32位处理器不考虑PAE的情况下能够访问的最大内存是多少？列出计算过程。
+
+现代的比较新的笔记本电脑、台式机，以及手机，基本都是64位处理器了。
+因此本课程推荐大家使用主流的64位处理器。
+
+### 1.5.2 操作系统选择
+
+C语言是运行在操作系统上的程序语言，所以需要选择一个操作系统。
+常见的操作系统有哪些？
+* 个人电脑（Personal Computer）：Windows、GNU/Linux、macOS
+* 服务器（Server）：GNU/Linux、BSD
+* 移动设备：iOS、Android
+* 嵌入式系统（Embedded System）：GNU/Linux、RTOS
+
+大家的电脑上安装的操作系统一般是：
+* Windows：驱动相对完善，软件生态极度繁荣，适合日常场景。
+* GNU/Linux：开源，免费，适合本地开发场景。
+* macOS：平台独占，适合影音媒体创作场景。
+
+大家之前可能也接触过 GNU/Linux 操作系统，而且以后的开发工作难免要以 GNU/Linux 操作系统作为开发环境。
+因此本课程推荐大家使用 GNU/Linux 操作系统。
+
+具体的发行版方面，推荐使用 Ubuntu 22.04.3 LTS，这个发行版的硬件驱动支持和软件生态都相对完善。
+
+当然了，Windows 和 macOS 也可以用于咱们这门课，只是尽量多接触 GNU/Linux 的开发生态，对大家以后熟练上手有帮助。
+
+### 1.5.3 编译器选择
+
+C语言是编译型语言，需要编译成目标文件，然后再由链接器生成可执行文件，所以需要选择一个编译器（Compiler）。
+编译器是C语言开发环境的核心组件，现在主流的 C 语言编译器包括：
+* Visual C++：微软的编译器，最初集成于 Visual Studio 之中，现在也开始支持其他平台。
+* Clang：Clang是LLVM（Low Level Virtual Machine 缩写）的编译器，最初为macOS设计，现在支持多平台。
+* GNU GCC：GNU编译器集合，支持多种处理器架构，支持多种编程语言，支持多种操作系统。
+* 其它：其它一些编译器，比如IAR、Keil、TinyCC等。
+
+以前的很多教材和课程都推荐大家用 Visual C++，涉及到很多Visual Studio 的相关内容，比如如何新建工程等等，这些对于初学C语言来说过于琐碎。
+
+本课程推荐大家使用 GCC 编译器。
+
+GCC 是一个套件，实际上包含了编译器和链接器等全套工具了。
+* 编译器负责将C语言源文件编译成目标文件（在Windows下扩展名通常位obj）；
+* 链接器负责将目标文件链接成可执行文件（在Windows下扩展名通常为exe）。
+
+### 1.5.4 GCC 的安装与使用
+
+Windows 下可以通过[MinGW](https://www.mingw-w64.org/downloads/#w64devkit)来安装GCC，但实际上还有更方便的途径，后面讲集成开发环境再说。
+
+macOS 下可以通过 包管理器 HomeBrew 安装 GCC，命令如下：
+```Bash
+user@macos:~$ brew install gcc
+```
+
+Linux 下安装 GCC 很简单方便，直接用包管理器安装即可。
+Ubuntu 下可以通过 apt 命令安装 GCC，命令如下：
+```Bash
+user@linux:~$ sudo apt install build-essential 
+```
+安装完成后，在终端中输入 `gcc --version` 命令，如果看到类似下面的输出，就说明安装成功了：
+```Bash
+user@linux:~$ gcc --version
+gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0
+Copyright (C) 2021 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   
+```
+
+GCC 使用非常简便，就像下面这样：
+```Bash
+user@linux:~$ ls # list的意思，这是列表显示当前目录下的文件
+hello.c
+user@linux:~$ cat hello.c # cat是显示的意思，这是显示hello.c的内容
+#include <stdio.h>
+int main() 
+{
+    /* 在终端中输出 Hello World */
+    //Prints the string "Hello, World!" to the console
+    printf("Hello, World! \n");
+    return 0;
+}
+user@linux:~$ gcc hello.c # gcc是编译的意思，这是将hello.c编译出来
+user@linux:~$ ls # 再次列表显示，看到按照默认配置会生成的一个a.out文件
+a.out  hello.c
+user@linux:~$ ./a.out # ./是当前路径的意思，这里是执行a.out文件
+Hello, World! # 终端显示Hello, World!代码执行成功
+user@linux:~$ gcc hello.c -o hello # 这里是使用-o参数指定生成的可执行文件名
+user@linux:~$ ls # 再次列表显示，看到生成了一个hello文件
+a.out  hello  hello.c 
+user@linux:~$ ./hello # 这里执行的是hello文件，终端显示
+Hello, World! # 代码执行成功
+```
+
+### 1.5.4 编辑器选择
+
+编辑器，直观来解释，就是咱们编辑源代码文件输入代码的工具。
+编辑器有很多种，有的是操作系统自带的，还有的需要额外安装。
+大家以前肯定都用过诸如记事本之类的软件吧？记事本就是一个编辑器。
+开发领域常见的编辑器有以下这些：
+* Vi/Vim 效率高强，无需鼠标，非常经典；
+* Emacs 功能强大，扩展丰富，也非常经典；
+* Nano 非常轻量级，支持多种操作系统；
+* Sublime Text 跨平台，支持多种操作系统，功能强大，但收费；
+* Atom 跨平台，支持多种操作系统，功能强大，开源免费；
+* Visual Studio Code 跨平台，支持多种操作系统，功能强大，开源免费；
+* Visual Studio Codium 跨平台，支持多种操作系统，功能强大，开源免费。
+
+还有很多其他的编辑器，此处不一一赘述。
+本课程推荐使用 Visual Studio Code 或者 Visual Studio Codium。
+
+在一些低能耗场景，比如路由器操作系统 OpenWRT、树莓派操作系统 Raspbian 等，可能没有图形界面，只能使用命令行界面，此时推荐使用 Nano。
 
 
-### 1.5.2 编译器选择
-
-
-### 1.5.3 编辑器选择
-
-
-### 1.5.4 集成开发环境
+### 1.5.5 集成开发环境
 
 
 # 2 初步体验C语言
