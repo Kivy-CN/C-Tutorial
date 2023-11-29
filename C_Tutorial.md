@@ -507,9 +507,13 @@ Time taken:  0.00033409999741706997  seconds
 
 ##### 思考题 7 C语言代码如果不加任何注释，可能会有什么不良影响？
 
-# 3 C语言的总体结构
+# 3 C语言代码的结构
 
 C语言代码，其实就是一个函数的集合体。
+函数如果太多了，代码就不好维护。
+所以就拆分出来一些，放到头文件里面。
+而每一个头文件，尽量就只负责一个类别的函数集合。
+本章就顺着这样的思路，来学习C语言代码的结构。
 
 ## 3.1 函数的声明和定义
 
@@ -531,7 +535,7 @@ C语言代码，其实就是一个函数的集合体。
 比如，`hello.c`里面的`hello_world`函数，它的声明和定义如下：    
 ```C
 #include <stdio.h> // 预处理命令，包含一下 stdio.h 文件，用<>就表明从系统库中寻找头文件
-#include "tools.h" // 预处理命令，包含一下 tools.h 文件，用""就表明从当前目录寻找头文件
+#include "tools.h" // 预处理命令，包含一下 tools.h 文件，用""就表明从当前目录寻找头文件，但这个头文件其实在这个代码中并没有使用
 int main() // 函数的声明，告诉编译器有一个名字叫做main的函数，接收0个参数，返回int类型
 { // 函数的定义，告诉编译器这个函数内部的具体运算过程
     /* 在终端中输出 Hello World */
@@ -588,8 +592,8 @@ void print_factors(int n) {
 
 然后是一个名为`code.c`的源代码：
 ```C
-#include <stdio.h>
-#include "tools.h"
+#include <stdio.h> // 预处理命令，包含一下 stdio.h 文件，用<>就表明从系统库中寻找头文件
+#include "tools.h" // 预处理命令，包含一下 tools.h 文件，用""就表明从当前目录寻找头文件
 
 int main() {
     // 定义一个变量n，用于存储一个正整数
@@ -641,9 +645,9 @@ int* get_factors(int n, int* num_factors) {
 
 然后是一个名为`code2.c`的源代码：
 ```C
-#include <stdio.h>
-#include <stdlib.h>
-#include "tools2.h"
+#include <stdio.h>  // 预处理命令，包含一下 stdio.h 文件，用<>就表明从系统库中寻找头文件
+#include <stdlib.h> // 预处理命令，包含一下 stdlib.h 文件，用<>就表明从系统库中寻找头文件
+#include "tools2.h" // 预处理命令，包含一下 tools2.h 文件，用""就表明从当前目录寻找头文件
 
 int main() {
     // 定义一个整型变量n
@@ -678,6 +682,12 @@ Enter a positive integer: 34
 The factors of 34 are: 1 2 17 34 
 ```
 
+### 3.3 复杂工程项目
 
+实际开发过程中，工程项目非常复杂，要根据具体的情况来编写代码，确定文件结构。
+有的工程可能需要多个源文件，有的工程可能需要多个头文件，有的工程可能需要多个库文件。
+![](./images/2-CodeBlocks-Projects.png)
+
+有的开发团队还提供了专门的文档，大家到时候严格依照文档来撰写，就可以了。
 
 

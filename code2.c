@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "tools2.h"
+#include <stdio.h>  // 预处理命令，包含一下 stdio.h 文件，用<>就表明从系统库中寻找头文件
+#include <stdlib.h> // 预处理命令，包含一下 stdlib.h 文件，用<>就表明从系统库中寻找头文件
+#include "tools2.h" // 预处理命令，包含一下 tools2.h 文件，用""就表明从当前目录寻找头文件
 
 int main() {
     // 定义一个整型变量n
