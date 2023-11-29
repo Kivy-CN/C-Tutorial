@@ -233,6 +233,16 @@ GCC 是一个套件，实际上包含了编译器和链接器等全套工具了�
 * 编译器负责将C语言源文件编译成目标文件（在Windows下扩展名通常位obj）；
 * 链接器负责将目标文件链接成可执行文件（在Windows下扩展名通常为exe）。
 
+不同的编译器对同样的 C 语言代码编译后，运行结果可能会有差异。
+因为不同的编译器可能会对代码进行不同的优化，或者在实现标准方面存在细微的差异。
+不同的编译器可能会使用不同的库或版本，这也可能会导致运行结果的差异。
+
+在编写 C 代码时，最好使用符合 ANSI C 标准的代码，以确保代码在不同的编译器和平台上都能够正确编译和运行。
+
+
+##### 思考题 3 建议大家在学习本课程中都是用GCC作为编译器，这样会有什么好处？
+
+
 ### 1.5.4 GCC 的安装与使用
 
 Windows 下可以通过[MinGW](https://www.mingw-w64.org/downloads/#w64devkit)来安装GCC，但实际上还有更方便的途径，后面讲集成开发环境再说。
@@ -301,6 +311,7 @@ Hello, World! # 代码执行成功
 在一些低能耗场景，比如路由器操作系统 OpenWRT、树莓派操作系统 Raspbian 等，可能没有图形界面，只能使用命令行界面，此时推荐使用 Nano。
 
 
+
 ### 1.5.5 集成开发环境
 
 集成开发环境，英文缩写为IDE（Integrated Development Environment），简称 IDE。
@@ -320,6 +331,13 @@ Hello, World! # 代码执行成功
 
 不过，对于Windows用户来说，下载安装集成了 MingW 的 Code::Blocks，可以一站式完成配置，更加方便。
 
+集成开发环境往往可以提供一些复杂工程的构建和管理等方面的援助，而且还有一些关键词自动补充之类的辅助功能。
+不过近年来随着copilot、codegeex之类基于大语言模型的人工智能编程助手的出现，情况已经有所改变。
+在Visual Studio Code、Vim等编辑器中集成AI编程助手，甚至直接使用AI编程助手进行编程，已经非常方便了。
+但总体来看，集成开发环境的文档还是更齐全一些，适应场景也更丰富。
+
+##### 思考题 4 使用编辑器+编译器的方式，和使用集成开发环境相比，各有什么优劣？
+
 # 2 初步体验C语言
 
 ## 2.1 第一个程序
@@ -333,9 +351,36 @@ int main()
     /* 在终端中输出 Hello World */
     //Prints the string "Hello, World!" to the console
     printf("Hello, World! \n"); 
-    return 0;
+    return 0; //return 0; 语句用于表示退出程序。
 }
 ```
+
+C语言程序代码每一行末尾要加分号“;”。
+所有的 C 语言程序都需要包含 main() 函数。
+代码从 main() 函数开始执行。
+上面的`/* ... */`用于注释说明。
+printf() 用于格式化输出到屏幕。
+printf() 函数在 "stdio.h" 头文件中声明。
+stdio.h 是一个头文件 (标准输入输出头文件) 。
+#include 是一个预处理命令，用来引入头文件。 
+当编译器遇到 printf() 函数时，如果没有找到 stdio.h 头文件，会发生编译错误。
+
+上面的代码，保存成一个 hello.c 的文件，然后使用 gcc 编译出来，就可以运行了。
+
+```Bash
+user@linux:~$ gcc hello.c # gcc是编译的意思，这是将hello.c编译出来
+user@linux:~$ ls # 再次列表显示，看到按照默认配置会生成的一个a.out文件
+a.out  hello.c
+user@linux:~$ ./a.out # ./是当前路径的意思，这里是执行a.out文件
+Hello, World! # 终端显示Hello, World!代码执行成功
+user@linux:~$ gcc hello.c -o hello # 这里是使用-o参数指定生成的可执行文件名
+user@linux:~$ ls # 再次列表显示，看到生成了一个hello文件
+a.out  hello  hello.c 
+user@linux:~$ ./hello # 这里执行的是hello文件，终端显示
+Hello, World! # 代码执行成功
+```
+
+##### 思考题 5 使用 GCC 编译一份名为 code.c 的C语言代码文件，指定生成名为 code 的可执行文件，命令是什么？
 
 ## 2.2 性能对比
 
@@ -386,7 +431,7 @@ Fibonacci Series: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 9
 Time taken: 0.004000 seconds
 ```
 
-##### 思考题 2 为什么C语言版本的斐波那契数列从 2144908973 往后的突然变成负数了？
+##### 思考题 6 为什么C语言版本的斐波那契数列从 2144908973 往后的突然变成负数了？
 
 Python代码：
 
@@ -459,3 +504,180 @@ Time taken:  0.00033409999741706997  seconds
 对C语言的代码，不同的开源组织、开发项目、开源社区，甚至不同的公司，都有不同的规范。
 大家尽量先照着课程样例代码来尝试着修改。
 等以后参与具体的开发的时候，再找对应的复杂的代码规范来遵守。
+
+##### 思考题 7 C语言代码如果不加任何注释，可能会有什么不良影响？
+
+# 3 C语言的总体结构
+
+C语言代码，其实就是一个函数的集合体。
+
+## 3.1 函数的声明和定义
+
+什么是函数？
+函数是C语言里面最基本的代码单元。
+能够复用的代码块，或者具有特定功能的代码集合体，都可以写成函数。
+
+函数是做什么用的呢？
+其实和数学里差不多，接收若干个变量，然后给出一个结果，就这么简单。
+不过编译器不一定那么聪明，而且编程语言都有规则限制，所以函数的声明和定义，需要写清楚。
+
+函数的声明和定义，可以写在一起，也可以分开。
+只是一定要记住，先声明，再定义，然后才能使用。
+
+声明，就是告诉编译器有一个什么名字的函数，接收几个什么样的参数，返回什么样的结果。
+定义，就是告诉编译器这个函数内部的具体运算过程。
+
+
+比如，`hello.c`里面的`hello_world`函数，它的声明和定义如下：    
+```C
+#include <stdio.h> // 预处理命令，包含一下 stdio.h 文件，用<>就表明从系统库中寻找头文件
+#include "tools.h" // 预处理命令，包含一下 tools.h 文件，用""就表明从当前目录寻找头文件
+int main() // 函数的声明，告诉编译器有一个名字叫做main的函数，接收0个参数，返回int类型
+{ // 函数的定义，告诉编译器这个函数内部的具体运算过程
+    /* 在终端中输出 Hello World */
+    //Prints the string "Hello, World!" to the console
+    printf("Hello, World! \n");  // 打印输出对应文字
+    return 0; // 返回一个int类型的值，0表示成功
+}
+```
+
+`stdio.h`是系统库中包含的标准输入输出头文件，`tools.h`是当前目录下包含的另一个头文件。
+函数的声明，以前经常用`void`来表示返回值类型，表示没有返回值。
+而现在一般不建议这么做，建议用`int`来表示返回值类型，如果正常运行结束就让返回0。
+函数的定义，一般用`{ }`来表示函数体，表示函数内部的运算过程。
+函数的参数，一般括号里面空白就表示没有参数。   
+
+##### 思考题 8 C语言代码里都用的英文的半角标点符号，如果换成中文的标点符号会如何？
+
+## 3.2 头文件、包含关系
+
+上面咱们试着体验过的`hello.c`，以及后面大家要尝试写的一些单个的C语言代码，都是简单形态的。
+实际上开发过程中，难以避免要使用复杂的包含关系。
+一个C语言源代码文件中，可能要包含若干个头文件，头文件里面又包含了其他头文件。
+比如，名为`code.c`的一个文件，里面要包含`tools.h`的头文件，而`tools.h`里面又包含了`stdio.h`的头文件。
+
+为什么要包含头文件呢？
+因为头文件里面包含了C语言的函数声明，而C语言的函数声明，是C语言源代码文件中的一部分。
+
+以`stdio.h`为例，头文件里面已经写好了很多非常基础又可能非常常用的函数。
+对于这类函数就没必要重新造轮子，直接拿来用就好了。
+
+### 3.2.2 无返回的调用
+
+首先是一个名为`tools.h`的头文件：
+```C
+#ifndef TOOLS_H
+#define TOOLS_H
+#include <stdio.h>
+// 打印一个数字的所有因子
+void print_factors(int n) {
+    // 打印提示信息
+    printf("The factors of %d are: ", n);
+    // 遍历所有因子
+    for (int i = 1; i <= n; ++i) {
+        // 如果因子存在，则打印出来
+        if (n % i == 0) {
+            printf("%d ", i);
+        }
+    }
+    // 打印换行符
+    printf("\n");
+}
+#endif
+```
+
+然后是一个名为`code.c`的源代码：
+```C
+#include <stdio.h>
+#include "tools.h"
+
+int main() {
+    // 定义一个变量n，用于存储一个正整数
+    int n;
+    // 打印出提示信息，让用户输入一个正整数
+    printf("Enter a positive integer: ");
+    // 使用scanf函数读取用户输入的正整数
+    scanf_s("%d", &n);
+    // 调用print_factors函数，打印出正整数的因子
+    print_factors(n);
+    return 0;
+}
+```
+
+最后编译`code.c`并运行：
+
+```Bash
+user@linux:~$ gcc code.c -o code    
+user@linux:~$ ./code            
+Enter a positive integer: 34
+The factors of 34 are: 1 2 17 34 
+```
+
+### 3.2.3 有返回的调用
+
+首先是一个名为`tools2.h`的头文件：
+```C
+#include <stdlib.h>
+
+// 计算一个数的所有因子
+int* get_factors(int n, int* num_factors) {
+    // 分配一个数组，用于存储因子
+    int* factors = (int*) malloc(n * sizeof(int));
+    // 记录因子个数
+    int count = 0;
+    // 从1开始，到n结束，每次循环加1
+    for (int i = 1; i <= n; ++i) {
+        // 如果n能被i整除，则将i记录到factors中
+        if (n % i == 0) {
+            factors[count++] = i;
+        }
+    }
+    // 将因子个数记录到num_factors中
+    *num_factors = count;
+    // 返回因子数组
+    return factors;
+}
+```
+
+然后是一个名为`code2.c`的源代码：
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include "tools2.h"
+
+int main() {
+    // 定义一个整型变量n
+    int n;
+    // 打印提示信息，让用户输入一个正整数
+    printf("Enter a positive integer: ");
+    // 读取用户输入的正整数
+    scanf("%d", &n);
+    // 定义一个整型变量num_factors，用于存储因子个数
+    int num_factors;
+    // 调用函数get_factors，获取因子，并存储在变量factors中
+    int* factors = get_factors(n, &num_factors);
+    // 打印提示信息，让用户知道因子
+    printf("The factors of %d are: ", n);
+    // 遍历变量factors，打印每一个因子
+    for (int i = 0; i < num_factors; ++i) {
+        printf("%d ", factors[i]);
+    }
+    printf("\n");
+    // 调用函数free，释放变量factors占用的内存空间
+    free(factors);
+    return 0;
+}
+```
+
+最后编译`code2.c`并运行：
+
+```Bash
+user@linux:~$ gcc code2.c -o code2    
+user@linux:~$ ./code2            
+Enter a positive integer: 34
+The factors of 34 are: 1 2 17 34 
+```
+
+
+
+
