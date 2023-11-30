@@ -115,7 +115,7 @@ Compile 和 Link 这两步骤是针对不同操作系统平台的，生成对应
 源代码（source code） → 预处理（preprocessor） → 编译器（compiler） → 汇编程序（assembler） → 目标代码（object code） → 链接器（Linker） → 可执行文件（executables）
 
 编译器读取源代码，编译出来目标文件，再由链接器链接成可执行文件。
-可执行文件就能拿来运行，如果有错误就进行修改，这个过程教易出错，需要调试。
+可执行文件就能拿来运行，若有错误就进行修改，这个过程教易出错，需要调试。
 
 ![](./images/1-coding-process.png)
 
@@ -263,7 +263,7 @@ Ubuntu 下可以通过 apt 命令安装 GCC，命令如下：
 user@linux:~$ sudo apt install build-essential 
 ```
 
-安装完成后，在终端中输入 `gcc --version` 命令，如果看到类似下面的输出，就说明安装成功了：
+安装完成后，在终端中输入 `gcc --version` 命令，若看到类似下面的输出，就说明安装成功了：
 
 ```Bash
 user@linux:~$ gcc --version
@@ -371,7 +371,7 @@ printf() 用于格式化输出到屏幕。
 printf() 函数在 "stdio.h" 头文件中声明。
 stdio.h 是一个头文件 (标准输入输出头文件) 。
 #include 是一个预处理命令，用来引入头文件。
-当编译器遇到 printf() 函数时，如果没有找到 stdio.h 头文件，会发生编译错误。
+当编译器遇到 printf() 函数时，若没有找到 stdio.h 头文件，会发生编译错误。
 
 上面的代码，保存成一个 hello.c 的文件，然后使用 gcc 编译出来，就可以运行了。
 
@@ -486,7 +486,7 @@ Time taken:  0.00033409999741706997  seconds
 实际上现在已经有很多驱动和操作系统内核部分是使用RUST语言来写了。
 
 不要迷信任何权威。
-如果过了很多年，关于这门课你已经没有太多印象了，我希望你还至少能记得这一点。
+若过了很多年，关于这门课你已经没有太多印象了，我希望你还至少能记得这一点。
 代码是最公正的，拿来运行，直接出结果。
 
 ## 2.4 代码的注释和规范
@@ -513,12 +513,12 @@ Time taken:  0.00033409999741706997  seconds
 大家尽量先照着课程样例代码来尝试着修改。
 等以后参与具体的开发的时候，再找对应的复杂的代码规范来遵守。
 
-##### 思考题 7 C语言代码如果不加任何注释，可能会有什么不良影响？
+##### 思考题 7 C语言代码若不加任何注释，可能会有什么不良影响？
 
 # 3 C语言代码的结构
 
 C语言代码，其实就是一个函数的集合体。
-函数如果太多了，代码就不好维护。
+函数若太多了，代码就不好维护。
 所以就拆分出来一些，放到头文件里面。
 而每一个头文件，尽量就只负责一个类别的函数集合。
 本章就顺着这样的思路，来学习C语言代码的结构。
@@ -555,11 +555,11 @@ int main() // 函数的声明，告诉编译器有一个名字叫做main的函�
 
 `stdio.h`是系统库中包含的标准输入输出头文件，`tools.h`是当前目录下包含的另一个头文件。
 函数的声明，以前经常用 `void`来表示返回值类型，表示没有返回值。
-而现在一般不建议这么做，建议用 `int`来表示返回值类型，如果正常运行结束就让返回0。
+而现在一般不建议这么做，建议用 `int`来表示返回值类型，若正常运行结束就让返回0。
 函数的定义，一般用 `{ }`来表示函数体，表示函数内部的运算过程。
 函数的参数，一般括号里面空白就表示没有参数。
 
-##### 思考题 8 C语言代码里都用的英文的半角标点符号，如果换成中文的标点符号会如何？
+##### 思考题 8 C语言代码里都用的英文的半角标点符号，若换成中文的标点符号会如何？
 
 ## 3.2 头文件、包含关系
 
@@ -588,7 +588,7 @@ void print_factors(int n) {
     printf("The factors of %d are: ", n);
     // 遍历所有因子
     for (int i = 1; i <= n; ++i) {
-        // 如果因子存在，则打印出来
+        // 若因子存在，则打印出来
         if (n % i == 0) {
             printf("%d ", i);
         }
@@ -642,7 +642,7 @@ int* get_factors(int n, int* num_factors) {
     int count = 0;
     // 从1开始，到n结束，每次循环加1
     for (int i = 1; i <= n; ++i) {
-        // 如果n能被i整除，则将i记录到factors中
+        // 若n能被i整除，则将i记录到factors中
         if (n % i == 0) {
             factors[count++] = i;
         }
@@ -725,11 +725,11 @@ C语言中，整型数据包括 `char`、`short`、`int`、`long`。
 ##### 思考题 9 `char`是字符，但实际上是整数，这是怎么回事呢？
 
 `char` 变量在内存中存储的是字符对应的ASCII 码值。
-如果以%c 输出，会根据ASCII码表转换成对应的字符；
-如果以%d 输出，那么还是整数。
+若以%c 输出，会根据ASCII码表转换成对应的字符；
+若以%d 输出，那么还是整数。
 
 `int`变量在内存中存储的是整数本身；
-如果以%c 输出时，也会根据ASCII码表转换成对应的字符。
+若以%c 输出时，也会根据ASCII码表转换成对应的字符。
 
 ```C
 #include <stdio.h> 
@@ -833,9 +833,9 @@ e = 3
 
 ## 4.4 尝试一下
 
-C语言是静态类型语言，也就是变量类型如果需要变化必须通过上面两种方式进行转换。
+C语言是静态类型语言，也就是变量类型若需要变化必须通过上面两种方式进行转换。
 
-##### 思考题 11 如果我就是头铁，就是要直接第二次赋值为一个不同的数据类型，会怎么样？？？
+##### 思考题 11 若我就是头铁，就是要直接第二次赋值为一个不同的数据类型，会怎么样？？？
 
 ```C
 #include <stdio.h> 
@@ -855,7 +855,7 @@ int main()
 
 ```Bash
 a = 10 
-b = 10.000000
+b = 11.000000
 ```
 
 ```C
@@ -865,7 +865,7 @@ int main()
     // 定义变量a，类型为int，赋值为10
     int a;
     a = 10;
-    a = 10.0; // 直接赋值为float类型，就是头铁！！！
+    a = 11.0; // 直接赋值为float类型，就是头铁！！！
     printf("a = %f\n", a);
     return 0;
 }
@@ -962,9 +962,9 @@ b = 'B';       // 变量b初始化为字符'B'
 
 一定要注意，变量使用之前要初始化！
 
-##### 思考题 13 如果不初始化，会发生什么？
+##### 思考题 13 若不初始化，会发生什么？
 
-在 C 语言中，如果变量没有显式初始化，则变量默认值将取决于该变量的类型和其所在的作用域。
+在 C 语言中，若变量没有显式初始化，则变量默认值将取决于该变量的类型和其所在的作用域。
 对于全局变量和静态变量（在函数内部定义的静态变量和在函数外部定义的全局变量），它们的默认初始值为零。
 不同类型的变量在没有显式初始化时也有不同的默认值：
 
@@ -1020,7 +1020,7 @@ int main()
 }
 ```
 
-##### 思考题 14 如果在上面的代码中尝试对预处理定义的常量进行修改，会如何？
+##### 思考题 14 若在上面的代码中尝试对预处理定义的常量进行修改，会如何？
 
 ## 6.2 const 关键字定义常量
 
@@ -1059,7 +1059,7 @@ int main()
 因为 #define 只是进行简单的文本替换，可能会导致一些意外的问题。
 而 const 常量相当于定义了一个不可修改的变量，因此也有了变量的优点，比如可以类型检查，还可以控制作用域。
 
-##### 思考题 15 实际编码中你认为应该用哪一种？如果考虑常量很多的场景呢？比如考虑内存占用呢？
+##### 思考题 15 实际编码中你认为应该用哪一种？若考虑常量很多的场景呢？比如考虑内存占用呢？
 
 # 7 C语言的运算符
 
@@ -1259,7 +1259,7 @@ int main()
 |`sizeof()`|	返回变量的大小。	|`sizeof(a)` 将返回 4，其中 a 是整数。|
 |`&`	|返回变量的地址。|	`&a;` 将给出变量的实际地址。|
 |`*`	|指向一个变量。	| `*a;` 将指向一个变量。|
-|`? :`|	条件表达式	| 如果条件为真 ? 则值为 X : 否则值为 Y|
+|`? :`|	条件表达式	| 若条件为真 ? 则值为 X : 否则值为 Y|
 
 
 ## 7.6 运算符的结合性和优先级
@@ -1317,9 +1317,9 @@ int main()
 main函数中调用其他函数，然后返回值回到main函数中调用该函数的位置。
 main函数结束后，整个程序也就运行结束了。
 
-如果有两种可能的选择，就要用到判断。
-如果根据不同情况执行不同的操作，就要用到分支。
-如果一个任务需要重复多次，这就需要循环。
+若有两种可能的选择，就要用到判断。
+若根据不同情况执行不同的操作，就要用到分支。
+若一个任务需要重复多次，这就需要循环。
 
 
 ## 8.1 判断和分支
@@ -1340,7 +1340,7 @@ int main ()
    /* 使用 if 语句检查布尔条件 */
    if( a < 20 )
    {
-       /* 如果条件为真，则输出下面的语句 */
+       /* 若条件为真，则输出下面的语句 */
        printf("a 小于 20\n" );
    }
    printf("a 的值是 %d\n", a);
@@ -1363,12 +1363,12 @@ int main ()
    /* 检查布尔条件 */
    if( a < 20 )
    {
-       /* 如果条件为真，则输出下面的语句 */
+       /* 若条件为真，则输出下面的语句 */
        printf("a 小于 20\n" );
    }
    else
    {
-       /* 如果条件为假，则输出下面的语句 */
+       /* 若条件为假，则输出下面的语句 */
        printf("a 大于 20\n" );
    }
    printf("a 的值是 %d\n", a);
@@ -1391,22 +1391,22 @@ int main ()
    /* 检查布尔条件 */
    if( a == 10 )
    {
-       /* 如果 if 条件为真，则输出下面的语句 */
+       /* 若 if 条件为真，则输出下面的语句 */
        printf("a 的值是 10\n" );
    }
    else if( a == 20 )
    {
-       /* 如果 else if 条件为真，则输出下面的语句 */
+       /* 若 else if 条件为真，则输出下面的语句 */
        printf("a 的值是 20\n" );
    }
    else if( a == 30 )
    {
-       /* 如果 else if 条件为真，则输出下面的语句 */
+       /* 若 else if 条件为真，则输出下面的语句 */
        printf("a 的值是 30\n" );
    }
    else
    {
-       /* 如果上面条件都不为真，则输出下面的语句 */
+       /* 若上面条件都不为真，则输出下面的语句 */
        printf("没有匹配的值\n" );
    }
    printf("a 的准确值是 %d\n", a );
@@ -1430,10 +1430,10 @@ int main ()
    /* 检查布尔条件 */
    if( a == 100 )
    {
-       /* 如果条件为真，则检查下面的条件 */
+       /* 若条件为真，则检查下面的条件 */
        if( b == 200 )
        {
-          /* 如果条件为真，则输出下面的语句 */
+          /* 若条件为真，则输出下面的语句 */
           printf("a 的值是 100，且 b 的值是 200\n" );
        }
    }
@@ -1591,7 +1591,7 @@ do while: 我请你吃冰淇淋，我走路上，前面一人，我不管这个�
 break 语句出现在一个循环内时，循环会立即终止;
 程序流将继续执行紧接着循环的下一条语句。
 break 可用于终止 switch 语句中的一个 case。
-如果使用嵌套循环，break 语句会停止执行最内层的循环，然后开始执行该块之后的下一行代码。
+若使用嵌套循环，break 语句会停止执行最内层的循环，然后开始执行该块之后的下一行代码。
 如下图所示：
 
 ![](./images/c-break-statement-works.jpg)
@@ -1690,13 +1690,456 @@ int main ()
 }
 ```
 
-# 9 函数和模块化设计
+# 9 数组、指针、字符串
+
+## 9.1 数组
+
+数组是用来存储一系列相同类型数据的集合。
+存储的是若干个确定个数的、固定大小的、相同类型元素的顺序集合。
+数组索引从0开始，数组元素必须都是同类型等大小的。
+
+```C
+double first[10];// 声明一个数组，大小为10，名字为 first，数据类型为 double
+double second[5] = {1000.0, 2.0, 3.4, 7.0, 50.00}; // 声明一个数组，大小为5，名字为 second，数据类型为 double，直接初始化来
+double third[] = {1000.0, 2.0, 3.4, 7.0, 50.00}; // 声明一个数组，大小没提，名字为 third，数据类型为 double，直接初始化就成了五个元素的
+first[4] = 50.00; // 给数组 first 的第五个元素赋值
+```
+C 语言中，数组名表示数组的地址，即数组首元素的地址。
+声明和定义一个数组时，该数组名就代表着该数组的地址。
+
+## 9.1.1 一维数组
+
+一维数组就是只有一行，多列。
+比如前面那个数组 first 就可以看作是下图这样：
+![](./images/c-array.png)
+
+一维数组只有一个索引值（Index Value），使用索引值就可以访问数组元素，如下所示：
+```C
+// 一维数组访问数组元素
+#include <stdio.h>
+ 
+int main ()
+{
+   int n[ 10 ]; /* n 是一个包含 10 个整数的数组 */
+   int i,j;
+ 
+   /* 初始化数组元素 */         
+   for ( i = 0; i < 10; i++ )
+   {
+      n[ i ] = i + 100; /* 设置元素 i 为 i + 100 */
+   }
+   
+   /* 输出数组中每个元素的值 */
+   for (j = 0; j < 10; j++ )
+   {
+      printf("Element[%d] = %d\n", j, n[j] );
+   }
+ 
+   return 0;
+}
+```
+
+
+## 9.1.2 二维数组
+二维数组就是有多行多列。
+
+二维数组就有两个索引值，第一个索引值称为行索引，第二个索引值称为列索引。
+![](./images/two_dimensional_arrays.jpg)
+
+比如下面这个二维数组：
+```C
+// 二维数组
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 一个带有 5 行 2 列的数组 */
+   int a[5][2] = { {0,0}, {1,2}, {2,4}, {3,6},{4,8}};
+   int i, j;
+ 
+   /* 输出数组中每个元素的值 */
+   for ( i = 0; i < 5; i++ )
+   {
+      for ( j = 0; j < 2; j++ )
+      {
+         printf("a[%d][%d] = %d\n", i,j, a[i][j] );
+      }
+   }
+   return 0;
+}
+```
+
+
+
+## 9.2 指针
+
+指针是一个变量，用于存储内存地址。
+C语言代码当中的一个变量都有一个内存位置，而每一个内存位置都定义了可使用 `&` 运算符访问的地址，就表示了对应变量在内存中地址。
+
+```C
+// 用指针指向已有变量，然后输出地址
+#include <stdio.h>
+ 
+int main ()
+{
+   int var_a = 10; // 定义一个变量
+   int *p;              // 定义指针变量，注意这里的类型要和所指目标一致，确定指针长度用
+   p = &var_a;     // 建立指向关系，实际上就是将 var_a 在内存中的地址赋值给 p
+   printf("var_a 变量的地址： %p\n", p);
+   return 0;
+}
+```
+
+
+### 9.2.1 指针的读取
+
+前面定义指针还是很简单的，若要读取指针所指位置的变量值，可以参考下面的代码：
+```C
+// 指针的读取
+#include <stdio.h>
+ 
+int main ()
+{
+   int  var = 20;   /* 实际变量的声明 */
+   int  *var_address;        /* 指针变量的声明 */
+ 
+   var_address = &var;  /* 在指针变量中存储 var 的地址 */
+ 
+   printf("var 变量的地址: %p\n", &var  );
+ 
+   /* 在指针变量中存储的地址 */
+   printf("var_address变量存储的地址: %p\n", var_address);
+ 
+   /* 使用指针访问值 */
+   printf("*var_address变量的值: %d\n", *var_address);
+ 
+   return 0;
+}
+```
+
+## 9.2.2 指针变量的类型和大小
+
+若指针变量定义的时候类型和目标不符，会怎么样？
+考虑第一种情况，目标变量是int，用float指针去指向，看看会如何。
+
+```C
+// 指针的类型和大小,第一种情况，目标变量是int，用float指针去指向。
+#include <stdio.h>
+ 
+int main ()
+{
+   int  var = 20;   /* 实际变量的声明 */
+   float  *var_address;        /* 指针变量的声明 */
+ 
+   var_address = &var;  /* 在指针变量中存储 var 的地址 */
+ 
+   printf("var 变量的地址: %p\n", &var  );
+ 
+   /* 在指针变量中存储的地址 */
+   printf("var_address变量存储的地址: %p\n", var_address);
+ 
+   /* 使用指针访问值 */
+   printf("*var_address变量的值: %f\n", *var_address);
+   printf("*var_address变量的值: %d\n", var);
+ 
+   return 0;
+}
+```
+
+考虑第二种情况，目标变量是float，用int指针去指向，看看会如何。
+
+```C
+// 指针的类型和大小,第二种情况，目标变量是float，用int指针去指向。
+#include <stdio.h>
+ 
+int main ()
+{
+   float  var = 20.0;   /* 实际变量的声明 */
+   int  *var_address;        /* 指针变量的声明 */
+ 
+   var_address = &var;  /* 在指针变量中存储 var 的地址 */
+ 
+   printf("var 变量的地址: %p\n", &var  );
+ 
+   /* 在指针变量中存储的地址 */
+   printf("var_address变量存储的地址: %p\n", var_address);
+ 
+   /* 使用指针访问值 */
+   printf("*var_address变量的值: %d\n", *var_address);
+   printf("*var_address变量的值: %f\n", var);
+ 
+   return 0;
+}
+```
+
+### 9.2.3 函数指针
+
+函数指针是指向函数的指针变量。
+函数指针可以像函数一样，用于调用函数、传递参数。
+
+```C
+//函数指针
+#include <stdio.h>
+ 
+int max(int x, int y)
+{
+    return x > y ? x : y;
+}
+ 
+int main(void)
+{
+    /* p 是函数指针 */
+    int (* p)(int, int) = & max; // 声明一个函数指针，注意要与指向函数有同样参数、返回值的类型
+    int a, b, c, d;
+ 
+    printf("请输入三个数字:");
+    scanf("%d %d %d", & a, & b, & c);
+ 
+    /* 与直接调用函数等价，d = max(max(a, b), c) */
+    d = p(p(a, b), c); 
+ 
+    printf("最大的数字是: %d\n", d);
+ 
+    return 0;
+}
+```
+
+## 9.3 字符串
+
+C 语言中，字符串实际上是使用空字符 `\0` 结尾的一维字符数组。
+本质上，就是一串字符数组，而最后一个元素是 `\0` 标记字符串的结束。
+这个结尾，也叫空字符（Null character），缩写为 NUL，\0 是转义字符，是告诉编译器，不是字符 0，而是空字符，即字符串结尾。
+
+### 9.3.1 字符串定义
+
+```C
+// 字符串定义
+#include <stdio.h>
+ 
+int main ()
+{
+  //Declare a character array of size 6 and assign it to the variable 'words'
+   char words[6] = {'H', 'E', 'L', 'L', 'O', '\0'}; 
+   //Print the contents of the array to the console
+   printf("The Computer Says: %s\n", words);
+   //Return 0 to indicate successful execution
+   return 0;
+}
+```
+
+### 9.3.2 字符串操作
+
+|函数|目的|
+|----|----|
+|strcpy(s1, s2) | 复制字符串 s2 到字符串 s1。|
+|strcat(s1, s2) | 连接字符串 s2 到字符串 s1 的末尾。|
+|strlen(s1) | 返回字符串 s1 的长度。|
+|strcmp(s1, s2) | 若 s1 和 s2 是相同的，则返回 0；若 s1<s2 则返回小于 0；若 s1>s2 则返回大于 0。|
+|strchr(s1, ch) | 返回一个指针，指向字符串 s1 中字符 ch 的第一次出现的位置。|
+|strstr(s1, s2) | 返回一个指针，指向字符串 s1 中字符串 s2 的第一次出现的位置。|
+
+```C
+// 字符串操作
+#include <stdio.h>
+#include <string.h>
+ 
+int main ()
+{
+   char str1[14] = "Hello";
+   char str2[14] = "World";
+   char str3[14];
+   int  len ;
+ 
+   /* 复制 str1 到 str3 */
+   strcpy(str3, str1);
+   printf("strcpy( str3, str1) :  %s\n", str3 );
+ 
+   /* 连接 str1 和 str2 */
+   strcat( str1, str2);
+   printf("strcat( str1, str2):   %s\n", str1 );
+ 
+   /* 连接后，str1 的总长度 */
+   len = strlen(str1);
+   printf("strlen(str1) :  %d\n", len );
+ 
+   return 0;
+}
+```
+
+# 10 结构体、共用体、数据结构基础
+
+## 10.1 结构体
+
+结构体是用户自定义的复合数据类型，允许存储不同类型的数据项。
+结构体的数据成员可以是基本数据类型（如 int、float、char 等），也可以是指针类型或者结构体类型等。
+
+```C
+#include <stdio.h>
+#include <string.h>
+ 
+struct Books // 结构体定义
+{
+   char  title[50];
+   char  author[50];
+   char  subject[100];
+   int   book_id;
+};
+
+/* 函数声明 */
+void printBook( struct Books book );
+int main( )
+{
+   struct Books Book1;        /* 声明 Book1，类型为 Books */
+   struct Books Book2;        /* 声明 Book2，类型为 Books */
+ 
+   /* Book1 详述 */
+   strcpy( Book1.title, "C Programming");
+   strcpy( Book1.author, "Nuha Ali"); 
+   strcpy( Book1.subject, "C Programming Tutorial");
+   Book1.book_id = 6495407;
+
+   /* Book2 详述 */
+   strcpy( Book2.title, "Telecom Billing");
+   strcpy( Book2.author, "Zara Ali");
+   strcpy( Book2.subject, "Telecom Billing Tutorial");
+   Book2.book_id = 6495700;
+ 
+   /* 输出 Book1 信息 */
+   printBook( Book1 );
+
+   /* 输出 Book2 信息 */
+   printBook( Book2 );
+
+   return 0;
+}
+void printBook( struct Books book )
+{
+   printf( "Book title : %s\n", book.title);
+   printf( "Book author : %s\n", book.author);
+   printf( "Book subject : %s\n", book.subject);
+   printf( "Book book_id : %d\n", book.book_id);
+}
+```
+
+## 10.2 共用体
+
+共用体是一种特殊的数据类型，允许在相同的内存位置存储不同的数据类型。
+可以定义一个有多成员的共用体，但只能有一个成员带有值。
+共用体提供了一种使用相同的内存位置的有效方式。
+
+```C
+// 共用体只允许一个数据成员有值
+#include <stdio.h>
+#include <string.h>
+ 
+union Data
+{
+   int i;
+   float f;
+   char  str[20];
+};
+ 
+int main( )
+{
+   union Data data;        
+ 
+   // Assign the value 10 to the integer variable i
+   data.i = 10;
+   // Print the value of the integer variable i
+   printf( "data.i : %d\n", data.i);
+   
+   // Assign the value 220.5 to the float variable f
+   data.f = 220.5;
+   // Print the value of the float variable f
+   printf( "data.f : %f\n", data.f);
+   
+   // Copy the string "C Programming" into the character array str
+   strcpy( data.str, "C Programming");
+   // Print the value of the integer variable i
+   printf( "data.i : %d\n", data.i);
+   // Print the value of the float variable f
+   printf( "data.f : %f\n", data.f);
+   // Print the value of the character array str
+   printf( "data.str : %s\n", data.str);
+ 
+   return 0;
+}
+```
+
+## 10.3 枚举
+
+枚举其实是 C 语言中的一种基本数据类型，定义一组有离散值的常量
+常用于为程序中的一组相关常量取名，以便可读性和维护性。
+定义一个枚举类型，需要使用 enum 关键字，后面跟着枚举类型名称，然后是用大括号 {} 括起来的一组枚举常量。每个枚举常量可以用一个标识符来表示，也可指定一个整数值，没指定则默认从 0 开始递增。
+
+```C
+// 枚举元素的遍历
+#include <stdio.h>
+ 
+enum DAY
+{
+      MON=1, TUE, WED, THU, FRI, SAT, SUN
+} day;
+int main()
+{
+    // 遍历枚举元素
+    for (day = MON; day <= SUN; day++) {
+        printf("枚举元素：%d \n", day);
+    }
+}
+```
+
+## 10.4 数据结构基础
+
+
+
+# 11 函数和模块化设计
 
 之前在关于代码结构的部分中，已经提到过函数，但那只是初步的介绍。
 这次咱们要详细说一下。
 
-## 9.1 函数
+## 11.1 函数
 
 函数是 C 程序中可重用代码块。
+
+函数的声明和定义前面已经说过了，这里主要讲一些细节的内容，比如函数的参数传递、函数的返回值等等。
+
+### 11.1.1 函数的参数传递
+
+函数的参数传递有三种方式：
+1. 值传递
+2. 指针传递
+3. 引用传递
+
+### 11.1.2 函数的返回值
+
+函数的返回值有三种方式：
+1. 返回值
+2. 返回指针
+3. 返回数组
+
+## 11.2 模块化设计
+
+模块化设计，就是将一个大的程序，拆分成一个个小的模块，然后将各个模块组合起来，构成一个完整的程序。
+模块化设计，可以提高代码的可重用性，提高代码的维护性，提高代码的阅读性。
+模块化设计，可以分为以下几个步骤：
+1. 分析模块
+2. 划分模块
+3. 模块接口设计
+4. 模块实现
+5. 模块测试
+6. 模块整合
+
+## 11.3 函数库
+
+函数库，就是一些函数的集合，这些函数被组织起来，形成一个库。
+
+# 12 文件操作
+
+# 13 网络访问
+
+# 14 图形界面
+
+# 15 Python 与 C 混合编程
 
 
