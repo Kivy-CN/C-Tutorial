@@ -1262,7 +1262,9 @@ int main()
 |`? :`|	条件表达式	| 如果条件为真 ? 则值为 X : 否则值为 Y|
 
 
-## 7.6 运算符优先级
+## 7.6 运算符的结合性和优先级
+
+运算符首先是由结合性，就是运算的方向。
 
 |   类别  | 运算符 | 结合性| 
 | :---------: | :------: | :----------: |
@@ -1277,3 +1279,424 @@ int main()
 |条件 | `?:` | 从右到左 |
 |赋值 | `= += -= *= /= %=>>= <<= &= ^= |=` | 从右到左 |
 |逗号 | `,` | 从左到右|
+
+
+运算符之间有优先次序，但也不用去背记，实际用起来就添加括号即可。
+
+```C
+// 运算符优先级
+#include <stdio.h>
+ 
+int main()
+{
+   int a = 20;
+   int b = 10;
+   int c = 15;
+   int d = 5;
+   int e;
+ 
+   e = (a + b) * c / d;      // ( 30 * 15 ) / 5
+   printf("(a + b) * c / d 的值是 %d\n",  e );
+ 
+   e = ((a + b) * c) / d;    // (30 * 15 ) / 5
+   printf("((a + b) * c) / d 的值是 %d\n" ,  e );
+ 
+   e = (a + b) * (c / d);   // (30) * (15/5)
+   printf("(a + b) * (c / d) 的值是 %d\n",  e );
+ 
+   e = a + (b * c) / d;     //  20 + (150/5)
+   printf("a + (b * c) / d 的值是 %d\n" ,  e );
+  
+   return 0;
+}
+```
+
+# 8 判断和循环
+
+按照前面所学，C程序的执行从main函数开始。
+main函数中调用其他函数，然后返回值回到main函数中调用该函数的位置。
+main函数结束后，整个程序也就运行结束了。
+
+如果有两种可能的选择，就要用到判断。
+如果根据不同情况执行不同的操作，就要用到分支。
+如果一个任务需要重复多次，这就需要循环。
+
+
+## 8.1 判断和分支
+
+判断有if单次判断、if-else判断、 if...else if...else多条判断。
+
+### 8.1.1 if 单次判断
+
+```C
+// if
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 10;
+ 
+   /* 使用 if 语句检查布尔条件 */
+   if( a < 20 )
+   {
+       /* 如果条件为真，则输出下面的语句 */
+       printf("a 小于 20\n" );
+   }
+   printf("a 的值是 %d\n", a);
+ 
+   return 0;
+}
+```
+
+### 8.1.2 if-else 判断
+
+```C
+// if else
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 100;
+ 
+   /* 检查布尔条件 */
+   if( a < 20 )
+   {
+       /* 如果条件为真，则输出下面的语句 */
+       printf("a 小于 20\n" );
+   }
+   else
+   {
+       /* 如果条件为假，则输出下面的语句 */
+       printf("a 大于 20\n" );
+   }
+   printf("a 的值是 %d\n", a);
+ 
+   return 0;
+}
+```
+
+### 8.1.3 if...else if...else 判断
+
+```C
+//  if...else if...else
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 100;
+ 
+   /* 检查布尔条件 */
+   if( a == 10 )
+   {
+       /* 如果 if 条件为真，则输出下面的语句 */
+       printf("a 的值是 10\n" );
+   }
+   else if( a == 20 )
+   {
+       /* 如果 else if 条件为真，则输出下面的语句 */
+       printf("a 的值是 20\n" );
+   }
+   else if( a == 30 )
+   {
+       /* 如果 else if 条件为真，则输出下面的语句 */
+       printf("a 的值是 30\n" );
+   }
+   else
+   {
+       /* 如果上面条件都不为真，则输出下面的语句 */
+       printf("没有匹配的值\n" );
+   }
+   printf("a 的准确值是 %d\n", a );
+ 
+   return 0;
+}
+```
+
+### 8.1.4 嵌套 if 判断
+
+```C
+// if 嵌套
+#include <stdio.h>
+
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 100;
+   int b = 200;
+ 
+   /* 检查布尔条件 */
+   if( a == 100 )
+   {
+       /* 如果条件为真，则检查下面的条件 */
+       if( b == 200 )
+       {
+          /* 如果条件为真，则输出下面的语句 */
+          printf("a 的值是 100，且 b 的值是 200\n" );
+       }
+   }
+   printf("a 的准确值是 %d\n", a );
+   printf("b 的准确值是 %d\n", b );
+ 
+   return 0;
+}
+```
+
+## 8.2 分支
+
+分支就是switch-case多条件判断。
+
+### 8.2.1 Switch 单层分支
+
+```C
+// Switch 分支
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   char grade = 'B';
+ 
+   switch(grade)
+   {
+   case 'A' :
+      printf("很棒！\n" );
+      break;
+   case 'B' :
+   case 'C' :
+      printf("做得好\n" );
+      break;
+   case 'D' :
+      printf("您通过了\n" );
+      break;
+   case 'F' :
+      printf("最好再试一下\n" );
+      break;
+   default :
+      printf("无效的成绩\n" );
+   }
+   printf("您的成绩是 %c\n", grade );
+ 
+   return 0;
+}
+```
+
+### 8.2.2 Switch 嵌套分支
+
+```C
+// Switch 嵌套
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 100;
+   int b = 200;
+ 
+   switch(a) {
+      case 100: 
+         printf("这是外部 switch 的一部分\n");
+         switch(b) {
+            case 200:
+               printf("这是内部 switch 的一部分\n");
+         }
+   }
+   printf("a 的准确值是 %d\n", a );
+   printf("b 的准确值是 %d\n", b );
+ 
+   return 0;
+}
+```
+
+## 8.3 循环
+
+具体的循环方式有for、while、do-while。
+
+#### 8.3.1 for 循环
+
+```C
+// for
+#include <stdio.h>
+ 
+int main ()
+{
+   /* for 循环执行 */
+   for( int a = 10; a < 20; a = a + 1 )
+   {
+      printf("a 的值： %d\n", a);
+   }
+ 
+   return 0;
+}
+```
+
+#### 8.3.2 while 循环
+
+```C
+// while
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 10;
+
+   /* while 循环执行 */
+   while( a < 20 )
+   {
+      printf("a 的值： %d\n", a);
+      a++;
+   }
+ 
+   return 0;
+}
+```
+
+
+#### 8.3.3 do-while 循环
+
+
+```C
+// do-while
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 10;
+
+   /* do 循环执行，在条件被测试之前至少执行一次 */
+   do
+   {
+       printf("a 的值： %d\n", a);
+       a = a + 1;
+   }while( a < 20 );
+ 
+   return 0;
+}
+```
+
+### 8.3.4 while 和 do while 的区别
+
+其实非常简单，无非是先验证再操作，还是先操作之后再验证。
+while: 我请你吃冰淇淋，我走路上，前面一人，我先看清楚这个人是不是你，不是就不打给买冰淇淋吃。
+do while: 我请你吃冰淇淋，我走路上，前面一人，我不管这个人是不是你，先买支冰淇淋递过去再说。
+
+## 8.4 跳出
+
+### 8.4.1 break 语句
+
+break 语句出现在一个循环内时，循环会立即终止;
+程序流将继续执行紧接着循环的下一条语句。
+break 可用于终止 switch 语句中的一个 case。
+如果使用嵌套循环，break 语句会停止执行最内层的循环，然后开始执行该块之后的下一行代码。
+如下图所示：
+
+![](./images/c-break-statement-works.jpg)
+
+```C
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 10;
+
+   /* while 循环执行 */
+   while( a < 20 )
+   {
+      printf("a 的值： %d\n", a);
+      a++;
+      if( a > 15)
+      {
+         /* 使用 break 语句终止循环 */
+          break;
+      }
+   }
+ 
+   return 0;
+}
+```
+
+
+### 8.4.2 continue 语句
+
+C 语言中的 continue 语句有点像 break 语句。但它不是强制终止，continue 会跳过当前循环中的代码，强迫开始下一次循环。
+
+对于 for 循环，continue 语句执行后自增语句仍然会执行。
+对于 while 和 do...while 循环，continue 语句重新执行条件判断语句。
+
+![](./images/c-continue-statement-works.jpg)
+
+```C
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 10;
+
+   /* do 循环执行 */
+   do
+   {
+      if( a == 15)
+      {
+         /* 跳过迭代 */
+         a = a + 1;
+         continue;
+      }
+      printf("a 的值： %d\n", a);
+      a++;
+     
+   }while( a < 20 );
+ 
+   return 0;
+}
+```
+
+### 8.4.3 goto 语句
+
+C 语言中的 goto 语句允许把控制无条件转移到同一函数内的被标记的语句。
+
+一般来说，日常的开发可能都不太建议使用 goto 语句。
+goto会使得程序控制流难以跟踪，难以理解和难以修改。
+![](./images/goto.png)
+
+```C
+#include <stdio.h>
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 10;
+ 
+   /* do 循环执行 */
+   LOOP:do
+   {
+      if( a == 15)
+      {
+         /* 跳过迭代 */
+         a = a + 1;
+         goto LOOP;
+      }
+      printf("a 的值： %d\n", a);
+      a++;
+     
+   }while( a < 20 );
+ 
+   return 0;
+}
+```
+
+# 9 函数和模块化设计
+
+之前在关于代码结构的部分中，已经提到过函数，但那只是初步的介绍。
+这次咱们要详细说一下。
+
+## 9.1 函数
+
+函数是 C 程序中可重用代码块。
+
+
