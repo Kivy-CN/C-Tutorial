@@ -1,0 +1,43 @@
+#include <stdio.h>
+ 
+/* 函数声明 */
+int swap(int *x, int *y);
+
+/* 函数定义 */
+int swap(int *x, int *y)
+{
+   int temp;
+
+   temp = *x; /* 保存 x 的值 */
+   *x = *y;    /* 把 y 赋值给 x */
+   *y = temp; /* 把 temp 赋值给 y */
+
+   
+   /* 打印函数内的值 */
+   printf("函数内，*x 的值： %d\n", *x );
+   printf("函数内，*y 的值： %d\n", *y );
+  
+   return 0 ;
+}
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 100;
+   int b = 200;
+   int *p1 = &a;
+   int *p2 = &b;
+ 
+   /* 打印交换前的值 */
+   printf("交换前，a 的值： %d\n", a );
+   printf("交换前，b 的值： %d\n", b );
+ 
+   /* 调用函数来交换值 */
+   swap(p1, p2);
+ 
+   /* 打印交换后的值 */
+   printf("交换后，a 的值： %d\n", a );
+   printf("交换后，b 的值： %d\n", b );
+ 
+   return 0;
+}

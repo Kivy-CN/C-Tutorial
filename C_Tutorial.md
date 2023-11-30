@@ -1966,7 +1966,7 @@ int main ()
 }
 ```
 
-# 10 结构体、共用体、数据结构基础
+# 10 结构体、共用体、枚举
 
 ## 10.1 结构体
 
@@ -2089,57 +2089,705 @@ int main()
 }
 ```
 
-## 10.4 数据结构基础
 
-
-
-# 11 函数和模块化设计
+# 11 函数的参数传递
 
 之前在关于代码结构的部分中，已经提到过函数，但那只是初步的介绍。
 这次咱们要详细说一下。
-
-## 11.1 函数
 
 函数是 C 程序中可重用代码块。
 
 函数的声明和定义前面已经说过了，这里主要讲一些细节的内容，比如函数的参数传递、函数的返回值等等。
 
-### 11.1.1 函数的参数传递
+函数是一组一起执行一个任务的语句。
+每个 C 程序都至少有一个主函数 main() ，还可以有额外定义的其他函数。
 
-函数的参数传递有三种方式：
-1. 值传递
-2. 指针传递
-3. 引用传递
+函数声明告诉编译器函数的名称、返回类型和参数。
+函数定义提供了函数的实际主体。
 
-### 11.1.2 函数的返回值
+C 标准库提供了大量的程序可以调用的内置函数，如字符串连接函数 strcat() ，内存复制函数 memcpy() 等等。
 
-函数的返回值有三种方式：
-1. 返回值
-2. 返回指针
-3. 返回数组
 
-## 11.2 模块化设计
+```C
+return_type function_name( parameter list ) // 返回类型  函数名( 参数列表)
+{
+   body of the function
+}
+```
+在 C 语言中，函数由一个函数头和一个函数主体组成。下面列出一个函数的所有组成部分：
 
-模块化设计，就是将一个大的程序，拆分成一个个小的模块，然后将各个模块组合起来，构成一个完整的程序。
-模块化设计，可以提高代码的可重用性，提高代码的维护性，提高代码的阅读性。
-模块化设计，可以分为以下几个步骤：
-1. 分析模块
-2. 划分模块
-3. 模块接口设计
-4. 模块实现
-5. 模块测试
-6. 模块整合
+返回类型：一个函数只能返回一个值。
+当然，这个返回值可以是各种类型，比如int、float、char等，也可以是复合数据类型，比如结构体。
 
-## 11.3 函数库
+函数名称：这是函数的实际名称。
 
-函数库，就是一些函数的集合，这些函数被组织起来，形成一个库。
+参数：这里的参数是形式参数，占位置，就是告诉下个类型和数。
+参数列表包括函数参数的类型、顺序、数量。
+参数是可选的，也就是说，函数可能不包含参数。
 
-# 12 文件操作
+当函数被调用时向参数传递一个值，被称为实际参数。
 
-# 13 网络访问
+## 11.1 传值调用
 
-# 14 图形界面
+```C
+// 传值调用，数值变化只在函数内部，不在外部
+#include <stdio.h>
+ 
+/* 函数声明 */
+int swap(int x, int y);
 
-# 15 Python 与 C 混合编程
+/* 函数定义 */
+int swap(int x, int y)
+{
+   int temp;
+
+   temp = x; /* 保存 x 的值 */
+   x = y;    /* 把 y 赋值给 x */
+   y = temp; /* 把 temp 赋值给 y */
+
+   
+   printf("函数内，x 的值： %d\n", x );
+   printf("函数内，y 的值： %d\n", y );
+  
+   return 0 ;
+}
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 100;
+   int b = 200;
+ 
+   printf("交换前，a 的值： %d\n", a );
+   printf("交换前，b 的值： %d\n", b );
+ 
+   /* 调用函数来交换值 */
+   swap(a, b);
+ 
+   printf("交换后，a 的值： %d\n", a );
+   printf("交换后，b 的值： %d\n", b );
+ 
+   return 0;
+}
+```
+
+## 11.2 引用调用
+
+也叫传址调用，将地址传过去了，在函数内改变 a 和 b 的值，也改变了函数外 a 和 b 的值。
+
+```C
+// 引用方式传递，数值变化在函数内部，也在外部
+#include <stdio.h>
+ 
+/* 函数声明 */
+int swap(int *x, int *y);
+
+/* 函数定义 */
+int swap(int *x, int *y)
+{
+   int temp;
+
+   temp = *x; /* 保存 x 的值 */
+   *x = *y;    /* 把 y 赋值给 x */
+   *y = temp; /* 把 temp 赋值给 y */
+
+   
+   printf("函数内，*x 的值： %d\n", *x );
+   printf("函数内，*y 的值： %d\n", *y );
+  
+   return 0 ;
+}
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 100;
+   int b = 200;
+ 
+   printf("交换前，a 的值： %d\n", a );
+   printf("交换前，b 的值： %d\n", b );
+ 
+   /* 调用函数来交换值 */
+   swap(&a,& b);
+ 
+   printf("交换后，a 的值： %d\n", a );
+   printf("交换后，b 的值： %d\n", b );
+ 
+   return 0;
+}
+```
+
+## 11.3 指针做参数
+
+指针做参数的情况，实际上和引用调用有点类似。
+```C
+#include <stdio.h>
+ 
+/* 函数声明 */
+int swap(int *x, int *y);
+
+/* 函数定义 */
+int swap(int *x, int *y)
+{
+   int temp;
+
+   temp = *x; /* 保存 x 的值 */
+   *x = *y;    /* 把 y 赋值给 x */
+   *y = temp; /* 把 temp 赋值给 y */
+
+   
+   printf("函数内，*x 的值： %d\n", *x );
+   printf("函数内，*y 的值： %d\n", *y );
+  
+   return 0 ;
+}
+ 
+int main ()
+{
+   /* 局部变量定义 */
+   int a = 100;
+   int b = 200;
+   int *p1 = &a;
+   int *p2 = &b;
+ 
+   printf("交换前，a 的值： %d\n", a );
+   printf("交换前，b 的值： %d\n", b );
+ 
+   /* 调用函数来交换值 */
+   swap(p1, p2);
+ 
+   printf("交换后，a 的值： %d\n", a );
+   printf("交换后，b 的值： %d\n", b );
+ 
+   return 0;
+}
+```
+# 12 数值排序
+
+数值排序有很多种方法，本章只介绍一些简单的。
+
+## 12.1 冒泡排序
+
+冒泡排序（英语：Bubble Sort）是一种简单的排序算法。它重复地走访过要排序的数列，一次比较两个元素，若他们的顺序（如从大到小、首字母从A到Z）错误就把他们交换过来。
+
+![](./images/Bubble_sort_animation.gif)
+
+```C
+// 冒泡排序
+#include <stdio.h>
+void bubble_sort(int arr[], int len) {
+    // 定义两个指针，分别指向数组头尾
+    int i, j, temp;
+    // 外层循环，控制比较的轮数
+    for (i = 0; i < len - 1; i++)
+        // 内层循环，控制每轮比较的次数
+        for (j = 0; j < len - 1 - i; j++)
+            // 若前一个数大于后一个数，则交换位置
+            if (arr[j] > arr[j + 1]) {
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+}
+int main() {
+    // 定义一个数组，用于存放需要排序的数字
+    int arr[] = { 11, 24, 3, 32, 82, 55, 89, 90, 37, 5, 64, 35, 9, 70 };
+    // 计算数组的长度
+    int len = (int) sizeof(arr) / sizeof(*arr);
+    // 调用冒泡排序函数，对数组进行排序
+    bubble_sort(arr, len);
+    // 定义一个指针，用于指向数组
+    int i;
+    // 遍历数组，输出排序后的结果
+    for (i = 0; i < len; i++)
+        printf("%d ", arr[i]);
+    return 0;
+}
+```
+
+## 12.2 选择排序
+
+选择排序（Selection sort）是一种简单直观的排序算法。它的工作原理如下。首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。
+
+![](./images/Selection_sort_animation.gif)
+
+```C
+// 选择排序
+#include <stdio.h>
+void selection_sort(int arr[], int len) {
+    // 定义变量i,j,min_idx,temp
+    int i, j, min_idx, temp;
+    // 外层循环，从0开始，到len-1结束
+    for (i = 0; i < len - 1; i++) {
+        // 定义最小值索引min_idx
+        min_idx = i;
+        // 内层循环，从i+1开始，到len结束
+        for (j = i + 1; j < len; j++)
+            // 若arr[j]小于arr[min_idx]
+            if (arr[j] < arr[min_idx])
+                // 更新最小值索引min_idx
+                min_idx = j;
+        // 交换arr[min_idx]和arr[i]
+        temp = arr[min_idx];
+        arr[min_idx] = arr[i];
+        arr[i] = temp;
+    }
+}
+int main() {
+    // 定义数组arr，初始值为11,24,3,32,82,55,89,90,37,5,64,35,9,70
+    int arr[] = { 11, 24, 3, 32, 82, 55, 89, 90, 37, 5, 64, 35, 9, 70 };
+    // 计算数组arr的长度
+    int len = (int) sizeof(arr) / sizeof(*arr);
+    // 调用选择排序函数
+    selection_sort(arr, len);
+    // 定义变量i
+    int i;
+    // 打印排序后的数组arr
+    for (i = 0; i < len; i++)
+        printf("%d ", arr[i]);
+    return 0;
+}
+```
+
+## 12.3 插入排序
+
+插入排序（英语：Insertion Sort）是一种简单直观的排序算法。它的工作原理是通过构建有序序列，对于未排序数据，在已排序序列中从后向前扫描，找到相应位置并插入。
+
+![](./images/Insertion_sort_animation.gif)
+
+```C
+// 插入排序
+#include <stdio.h>
+void insertion_sort(int arr[], int len) {
+    // 插入排序
+    int i, j, key;
+    for (i = 1; i < len; i++) {
+        key = arr[i];
+        j = i - 1;
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+int main() {
+    // 定义一个数组
+    int arr[] = { 11, 24, 3, 32, 82, 55, 89, 90, 37, 5, 64, 35, 9, 70 };
+    // 计算数组的长度
+    int len = (int) sizeof(arr) / sizeof(*arr);
+    // 调用插入排序函数
+    insertion_sort(arr, len);
+    // 打印排序后的数组
+    int i;
+    for (i = 0; i < len; i++)
+        printf("%d ", arr[i]);
+    return 0;
+}
+```
+
+## 12.4 归并排序
+
+归并排序把数据分为两段，从两段中逐个选最小的元素移入新数据段的末尾。可从上到下或从下到上进行。
+
+![](./images/Merge_sort_animation.gif)
+
+```C
+// 归并排序
+#include <stdio.h>
+void merge(int arr[], int l, int m, int r) {
+    // 定义三个指针，分别指向左右两个数组
+    int i, j, k;
+    // 计算左右数组的长度
+    int n1 = m - l + 1;
+    int n2 = r - m;
+    // 定义两个临时数组，用来存储左右数组
+    int L[n1], R[n2];
+    // 将左右数组的值分别存入临时数组中
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+    // 定义三个指针，分别指向临时数组的三个位置
+    i = 0;
+    j = 0;
+    k = l;
+    // 比较左右数组的值，将较小的值存入arr数组中
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+    // 将左数组剩余的值存入arr数组中
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+    // 将右数组剩余的值存入arr数组中
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+void merge_sort(int arr[], int l, int r) {
+    // 若左数组的值小于右数组的值，则进行归并排序
+    if (l < r) {
+        // 计算中间值
+        int m = l + (r - l) / 2;
+        // 递归调用归并排序，对左数组进行排序
+        merge_sort(arr, l, m);
+        // 递归调用归并排序，对右数组进行排序
+        merge_sort(arr, m + 1, r);
+        // 将左右数组进行归并
+        merge(arr, l, m, r);
+    }
+}
+int main() {
+    // 定义一个数组，用来存储输入的值
+    int arr[] = { 11, 24, 3, 32, 82, 55, 89, 90, 37, 5, 64, 35, 9, 70 };
+    // 计算数组的长度
+    int len = (int) sizeof(arr) / sizeof(*arr);
+    // 调用归并排序函数，对数组进行排序
+    merge_sort(arr, 0, len - 1);
+    // 定义一个指针，用来指向数组中的每一个值
+    int i;
+    // 遍历数组，输出每一个值
+    for (i = 0; i < len; i++)
+        printf("%d ", arr[i]);
+    return 0;
+}
+```
+
+
+# 13 文件操作
+
+C 语言中可以使用 fopen( ) 函数来创建一个新的文件或者打开一个已有的文件。
+
+这个函数调用的原型：
+
+FILE *fopen( const char *filename, const char *mode );
+在这里，filename 文件名字符串，mode 是访问模式
+
+|mode模式 | 描述|
+|:---:|:---:|
+|r | 打开一个已有的文本文件，允许读取文件。|
+|w | 打开一个文本文件，允许写入文件。若文件不存在，则会创建一个新文件。程序会从文件的开头写入内容。若文件存在，则该会被截断为零长度，重新写入。|
+|a | 打开一个文本文件，以追加模式写入文件。若文件不存在，则会创建一个新文件。程序会在已有的文件内容中追加内容。|
+|r+ | 打开一个文本文件，允许读写文件。|
+|w+ | 打开一个文本文件，允许读写文件。若文件已存在，则文件会被截断为零长度，若文件不存在，则会创建一个新文件。|
+|a+ | 打开一个文本文件，允许读写文件。若文件不存在，则会创建一个新文件。读取会从文件的开头开始，写入则只能是追加模式。|
+
+若处理的是二进制文件，则需使用下面的访问模式来取代上面的访问模式：
+`rb`, `wb`, `ab`, `rb+`, `r+b`, `wb+`, `w+b`, `ab+`, `a+b`
+一般来说，`+b` 和 `b+` 两个模式是等价的，`+b`是C语言标准的模式，而`b+`是POSIX标准的模式。
+
+## 13.1 文件读取
+
+```C
+// 文件读取
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    // 定义文件指针
+    FILE *fp;
+    // 定义文件名
+    char filename[] = "time.txt";
+    // 定义缓冲区
+    char buffer[80];
+
+    // 打开文件
+    fp = fopen(filename, "r");
+    // 判断文件是否打开成功
+    if (fp == NULL) {
+        printf("Failed to open file.\n");
+        exit(1);
+    }
+
+    // 读取文件内容并输出
+    while (fgets(buffer, 80, fp) != NULL) {
+        printf("%s", buffer);
+    }
+
+    // 关闭文件
+    fclose(fp);
+    return 0;
+}
+```
+
+## 13.2 文件写入
+
+在当前目录下创建一个名为`time.txt`的文件，并将当前日期、时间以utf-8编码写入该文件中：
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+int main() {
+    // 定义文件指针
+    FILE *fp;
+    // 定义文件名
+    char filename[] = "time.txt";
+    // 定义缓冲区
+    char buffer[80];
+    // 定义时间戳
+    time_t rawtime;
+    // 定义时间信息
+    struct tm *timeinfo;
+
+    // 获取当前时间戳
+    time(&rawtime);
+    // 获取本地时间信息
+    timeinfo = localtime(&rawtime);
+
+    // 打开文件
+    fp = fopen(filename, "w");
+    // 判断文件是否创建成功
+    if (fp == NULL) {
+        printf("Failed to create file.\n");
+        exit(1);
+    }
+
+    // 将时间信息转换为字符串
+    strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", timeinfo);
+    // 将时间信息写入文件
+    fprintf(fp, "Date and Time: %s\n", buffer);
+
+    // 关闭文件
+    fclose(fp);
+    // 提示文件创建成功
+    printf("File created successfully.\n");
+    return 0;
+}
+```
+
+
+## 13.3 文件追加
+
+读取刚刚创建的`time.txt`的文件，并将昨天的日期、时间以utf-8编码以追加形式写入该文件中：
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+int main() {
+    // 定义文件指针
+    FILE *fp;
+    // 定义文件名
+    char filename[] = "time.txt";
+    // 定义缓冲区
+    char buffer[80];
+    // 定义时间戳
+    time_t rawtime;
+    // 定义时间信息
+    struct tm *timeinfo;
+
+    // 获取当前时间戳
+    time(&rawtime);
+    // 减去一天的秒数
+    rawtime -= 24 * 60 * 60;
+    // 获取昨天的时间信息
+    timeinfo = localtime(&rawtime);
+
+    // 打开文件
+    fp = fopen(filename, "a");
+    // 判断文件是否打开成功
+    if (fp == NULL) {
+        printf("Failed to open file.\n");
+        exit(1);
+    }
+
+    // 将时间信息转换为字符串
+    strftime(buffer, 80, "%Y-%m-%d %H:%M:%S", timeinfo);
+    // 将时间信息写入文件
+    fprintf(fp, "Yesterday's Date and Time: %s\n", buffer);
+
+    // 关闭文件
+    fclose(fp);
+    // 提示文件写入成功
+    printf("File written successfully.\n");
+    return 0;
+}
+```
+
+
+# 14 Python 与 C 混合编程
+
+首先，我们需要创建一个C语言函数并将其编译为共享对象（.so）文件。然后，我们可以在Python中使用`ctypes`库来调用这个.so文件。
+示例假设的C函数只有一个整数参数，并且Python代码和.so文件在同一目录下。
+请注意，这只是基本示例。实际使用中，你可能需要处理更复杂的情况，比如错误处理、内存管理等。
+
+## 14.1 单向调用无返回值
+
+首先，我们创建一个名为`factors.c`的C文件，内容如下：
+
+```c
+// 给出一个整数，打印输出因子
+#include <stdio.h>
+
+void print_factors(int num) {
+    // 定义一个变量i
+    int i;
+    // 遍历从1到num的每一个数
+    for(i = 1; i <= num; ++i) {
+        // 如果num能被i整除，则输出i
+        if (num % i == 0) {
+            printf("%d ", i);
+        }
+    }
+}
+```
+
+然后，使用以下命令将其编译为.so文件：
+
+```bash
+gcc -shared -o factors.so factors.c
+```
+
+接下来，在Python中使用`ctypes`库来加载和调用这个.so文件：
+
+```python
+import ctypes
+
+# 加载.so文件
+factors = ctypes.CDLL('./factors.so')
+
+# 设置参数类型
+factors.print_factors.argtypes = [ctypes.c_int]
+
+# 调用函数
+factors.print_factors(10)
+```
+
+在这个Python代码中，首先加载了.so文件，然后设置了`print_factors`函数的参数类型，最后调用了这个函数。
+
+## 14.2 返回因子个数
+
+下面是一个返回因子个数的C函数的示例：
+```C
+// 给出一个整数，打印输出因子，返回因子个数
+#include <stdio.h>
+
+int print_factors(int num) {
+    // 定义一个变量i和一个计数器count
+    int i, count = 0;
+    // 遍历从1到num的每一个数
+    for(i = 1; i <= num; ++i) {
+        // 如果num能被i整除，则输出i并增加计数器的值
+        if (num % i == 0) {
+            printf("%d ", i);
+            count++;
+        }
+    }
+    // 返回计数器的值
+    return count;
+}
+```
+
+然后，使用以下命令将其编译为.so文件：
+
+```bash
+gcc -shared -o factors2.so 14.2.c
+```
+
+接下来，在Python中使用`ctypes`库来加载和调用这个.so文件：
+
+```python
+import ctypes
+
+# 加载.so文件
+factors = ctypes.CDLL('./factors2.so')
+
+# 设置参数类型
+factors.print_factors.argtypes = [ctypes.c_int]
+
+# 调用函数
+a = factors.print_factors(10)
+
+print('value of a is ',a)
+```
+
+## 14.3 返回因子列表
+
+若要将所有因子都饭回来，那就需要对 C 代码做很大调改。
+另外要考虑到释放内存，所以整体都要复杂一些。
+
+```C
+// 给出一个整数，返回因子列表
+#include <stdlib.h>
+
+int* get_factors(int num, int* count) {
+    // 定义一个变量i和一个计数器
+    int i;
+    *count = 0;
+    // 计算因子的数量
+    for(i = 1; i <= num; ++i) {
+        if (num % i == 0) {
+            (*count)++;
+        }
+    }
+    // 分配存储因子的数组
+    int* factors = (int*) malloc(*count * sizeof(int));
+    // 将因子存储到数组中
+    int j = 0;
+    for(i = 1; i <= num; ++i) {
+        if (num % i == 0) {
+            factors[j++] = i;
+        }
+    }
+    // 返回指向因子列表的指针
+    return factors;
+}
+
+void free_factors(int* factors) {
+    // 释放存储因子的数组
+    free(factors);
+}
+```
+
+然后再用`gcc`编译它：
+```Bash
+gcc -shared -o factors3.so -fPIC 14.3.c
+```
+
+在 Python 代码调用上面的函数是一定要记得释放内存：
+```Python
+import ctypes
+
+# 加载.so文件
+factors = ctypes.CDLL('./factors3.so')
+
+# 设置参数类型和返回类型
+factors.get_factors.argtypes = [ctypes.c_int, ctypes.POINTER(ctypes.c_int)]
+factors.get_factors.restype = ctypes.POINTER(ctypes.c_int)
+factors.free_factors.argtypes = [ctypes.POINTER(ctypes.c_int)]
+
+# 调用函数
+num = 10
+count = ctypes.c_int()
+factors_list = factors.get_factors(num, ctypes.byref(count))
+
+# 将因子列表转换为Python列表
+factors_py = [factors_list[i] for i in range(count.value)]
+
+# 释放内存
+factors.free_factors(factors_list)
+
+# 打印因子列表
+print(factors_py)
+
+```
+
 
 
