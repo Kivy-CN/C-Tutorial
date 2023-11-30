@@ -399,6 +399,7 @@ C语言的性能一定比Python快么？
 C语言代码：
 
 ```C
+// 斐波那契数列 
 #include <stdio.h>
 #include <time.h>
 
@@ -2789,5 +2790,427 @@ print(factors_py)
 
 ```
 
+# 15 ASCII 码和简单加密
+
+## 15.1 字符编码
+
+ASCII 码是从0到127，一共有 128 个值，对应了128个字符。
+* 控制字符：0-31、127（删除键）
+* 空白字符：空格（32）、 制表符、 垂直制表符、 换行、 回车。
+* 可显字符：a-z、A-Z、0-9、~、！、@、、%、^、&、#、$、*、（、）、-、+、{、}、[、]、'、"、<、>、，、？、/、|、\、_、：、;、.，、。
+
+|ASCII值|控制字符|ASCII值|控制字符|ASCII值|控制字符|ASCII值|控制字符|
+|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+|`0`|`NUT`|`32`|`空格(space)`|`64`|`@`|`96`|`（反引号）`|
+|`1`|`SOH`|`33`|`!`|`65`|`A`|`97`|`a`|
+|`2`|`STX`|`34`|`"`|`66`|`B`|`98`|`b`|
+|`3`|`ETX`|`35`|`#`|`67`|`C`|`99`|`c`|
+|`4`|`EOT`|`36`|`$`|`68`|`D`|`100`|`d`|
+|`5`|`ENQ`|`37`|`%`|`69`|`E`|`101`|`e`|
+|`6`|`ACK`|`38`|`&`|`70`|`F`|`102`|`f`|
+|`7`|`BEL`|`39`|`'`|`71`|`G`|`103`|`g`|
+|`8`|`BS`|`40`|`(`|`72`|`H`|`104`|`h`|
+|`9`|`HT`|`41`|`)`|`73`|`I`|`105`|`i`|
+|`10`|`LF`|`42`|`*`|`74`|`J`|`106`|`j`|
+|`11`|`VT`|`43`|`+`|`75`|`K`|`107`|`k`|
+|`12`|`FF`|`44`|`,`|`76`|`L`|`108`|`l`|
+|`13`|`CR`|`45`|`-`|`77`|`M`|`109`|`m`|
+|`14`|`SO`|`46`|`.`|`78`|`N`|`110`|`n`|
+|`15`|`SI`|`47`|`/`|`79`|`O`|`111`|`o`|
+|`16`|`DLE`|`48`|`0`|`80`|`P`|`112`|`p`|
+|`17`|`DCI`|`49`|`1`|`81`|`Q`|`113`|`q`|
+|`18`|`DC2`|`50`|`2`|`82`|`R`|`114`|`r`|
+|`19`|`DC3`|`51`|`3`|`83`|`S`|`115`|`s`|
+|`20`|`DC4`|`52`|`4`|`84`|`T`|`116`|`t`|
+|`21`|`NAK`|`53`|`5`|`85`|`U`|`117`|`u`|
+|`22`|`SYN`|`54`|`6`|`86`|`V`|`118`|`v`|
+|`23`|`TB`|`55`|`7`|`87`|`W`|`119`|`w`|
+|`24`|`CAN`|`56`|`8`|`88`|`X`|`120`|`x`|
+|`25`|`EM`|`57`|`9`|`89`|`Y`|`121`|`y`|
+|`26`|`SUB`|`58`|`:`|`90`|`Z`|`122`|`z`|
+|`27`|`ESC`|`59`|`;`|`91`|`[`|`123`|`{`|
+|`28`|`FS`|`60`|`<`|`92`|`\`|`124`|`|`|
+|`29`|`GS`|`61`|`=`|`93`|`]`|`125`|`}`|
+|`30`|`RS`|`62`|`>`|`94`|`^`|`126`|`～`|
+|`31`|`US`|`63`|`?`|`95`|`_`|`127`|`DEL`|
 
 
+```C
+//读取长字符，并一个一个显示 ASCII 码。
+#include <stdio.h>
+#define MAX_STRING_LENGTH 65535 // 最大字符串长度
+
+int main(){
+  char s[MAX_STRING_LENGTH];
+  printf("请输入长度小于 %d 的任意字符：",MAX_STRING_LENGTH);
+  scanf("%s",s);    // 读取字符串。
+  for(int i = 0; s[i]; i++){
+    printf("%c 的 ASCII 码为:%d\n",s[i],s[i]);
+  }
+}
+```
+
+## 15.2 偏移加密
+
+用 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" 按顺序排列。
+然后让用户输入字符串，再输入偏移量。
+针对文本进行对应偏移，然后输出偏移后的密文，以及原文。
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define BASE64_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+#define BASE64_PAD_CHAR '='
+
+// 编码函数，参数input为输入字符串，output为输出字符串，shift为偏移量
+void encode(char *input, char *output, int shift) {
+    int i = 0;
+    while (input[i] != '\0') {
+        if (isalpha(input[i])) {
+            char c = input[i];
+            if (isupper(c)) {
+                c = tolower(c);
+            }
+            int index = strchr(BASE64_CHARS, c) - BASE64_CHARS;
+            int shifted_index = (index + shift) % strlen(BASE64_CHARS);
+            output[i] = BASE64_CHARS[shifted_index];
+        } else {
+            output[i] = input[i];
+        }
+        i++;
+    }
+    output[i] = '\0';
+}
+
+int main() {
+    // 定义一个字符串数组，用于存储输入的字符串
+    char input[1000];
+    // 打印提示信息，让用户输入字符串
+    printf("Enter a string to encode: ");
+    // 读取用户输入的字符串
+    fgets(input, 1000, stdin);
+    // 将换行符替换为'\0'
+    input[strcspn(input, "\n")] = 0;
+
+    // 定义一个变量，用于存储偏移量
+    int shift;
+    // 打印提示信息，让用户输入偏移量
+    printf("Enter a shift value: ");
+    // 读取用户输入的偏移量
+    scanf("%d", &shift);
+
+    // 定义一个字符串数组，用于存储编码后的字符串
+    char encoded[1000];
+    // 调用encode函数，对输入的字符串进行编码，并将编码后的字符串存储到encoded数组中
+    encode(input, encoded, shift);
+    // 打印编码后的字符串
+    printf("Encoded string: %s\n", encoded);
+
+    // 定义一个字符串数组，用于存储解码后的字符串
+    char decoded[1000];
+    // 调用encode函数，对编码后的字符串进行解码，并将解码后的字符串存储到decoded数组中
+    encode(encoded, decoded, -shift);
+    // 打印解码后的字符串
+    printf("Original string: %s\n", decoded);
+    return 0;
+}
+```
+
+## 15.3 Base64 编码
+
+Base64 是一种用 64 个字符表示任意 8 位字节序列的编码方式。
+
+```C
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define BASE64_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+#define BASE64_PAD_CHAR '='
+
+void base64_encode(const char *input, char *output) {
+    int i = 0, j = 0;
+    unsigned char char_array_3[3], char_array_4[4];
+    int in_len = strlen(input);
+    int out_len = 0;
+
+    // 遍历输入字符串，每3个字符一组，进行base64编码
+    while (in_len--) {
+        char_array_3[i++] = *(input++);
+        if (i == 3) {
+            char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
+            char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
+            char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
+            char_array_4[3] = char_array_3[2] & 0x3f;
+
+            // 将base64编码字符串写入输出字符串
+            for (i = 0; i < 4; i++) {
+                output[out_len++] = BASE64_CHARS[char_array_4[i]];
+            }
+            i = 0;
+        }
+    }
+
+    // 如果输入字符串长度不是3的倍数，则进行补0操作
+    if (i) {
+        for (j = i; j < 3; j++) {
+            char_array_3[j] = '\0';
+        }
+
+        char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
+        char_array_4[1] = ((char_array_3[0] & 0x03) << 4) + ((char_array_3[1] & 0xf0) >> 4);
+        char_array_4[2] = ((char_array_3[1] & 0x0f) << 2) + ((char_array_3[2] & 0xc0) >> 6);
+        char_array_4[3] = char_array_3[2] & 0x3f;
+
+        // 将base64编码字符串写入输出字符串
+        for (j = 0; j < i + 1; j++) {
+            output[out_len++] = BASE64_CHARS[char_array_4[j]];
+        }
+
+        // 将补0操作写入输出字符串
+        while (i++ < 3) {
+            output[out_len++] = BASE64_PAD_CHAR;
+        }
+    }
+    output[out_len] = '\0';
+}
+
+int main() {
+    char input[1000];
+    printf("Enter a string to encode in base64: ");
+    fgets(input, 1000, stdin);
+    input[strcspn(input, "\n")] = 0;
+
+    char encoded[1000];
+    base64_encode(input, encoded);
+    printf("Encoded string: %s\n", encoded);
+
+    printf("Original string: %s\n", input);
+    return 0;
+}
+```
+
+## 15.4 解决乱码问题
+
+前面的程序如果直接输入中文，可能会输出乱码。
+这是怎么回事呢？
+GNU/Linux 和 C 语言 默认的一般都是 UTF-8 编码，而 Windows 默认的一般是 GBK 编码。
+编码不匹配就会导致乱码。
+
+```C
+// 解决中文乱码
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <locale.h>
+
+int main() {
+    // 设置本地化，使用中文编码
+    setlocale(LC_ALL, "zh_CN.UTF-8");
+
+    char input[1000];
+    printf("请输入中文字符串：");
+    fgets(input, 1000, stdin);
+    // 去掉换行符
+    input[strcspn(input, "\n")] = 0;
+    printf("直接打印输出中文：\n");
+    printf("%s\n", input);
+    printf("转码打印输出中文：\n");
+    // 使用GBK编码打印输出
+    #ifdef _WIN32 // 这里判断若是 Windows 系统，就切换编码到GBK，然后再输出刚刚的中文字符串
+        system("chcp 936 > nul");
+    #endif
+    printf("%s\n", input);
+    return 0;
+}
+```
+
+编译上面的代码，然后运行：
+```Bash
+gcc 16.1.c -o test.exe
+./test.exe
+```
+
+上述代码在GNU/Linux 下编译运行的效果为：
+```Bash
+请输入中文字符串：你好
+直接打印输出中文：
+你好
+转码打印输出中文：
+你好
+```
+
+上述代码在 Windows 下编译运行的效果为：
+```Bash
+请输入中文字符串：你好
+直接打印输出中文：
+���
+转码打印输出中文：
+你好
+```
+
+
+# 16 溢出
+
+## 16.1 整数溢出
+
+整数溢出是指，当程序试图存储超出其类型的表示范围的数据时，会发生溢出。
+
+还记得前面在 2.2 部分中，我们曾经用 C 和 Python 分别计算前100个斐波那契数列么？
+当时 C 语言版本的在某个值后突然变为负数了。
+这其实就是整数溢出了。
+怎么办呢？咱们试着用 long long 替代 int。
+
+```C
+// 斐波那契数列 long long int 版本
+#include <stdio.h>
+#include <time.h>
+
+int main() {
+    // 定义变量n，表示要输出多少个斐波那契数列
+    long long  n = 100, i, t1 = 0, t2 = 1, nextTerm;
+    // 输出提示信息
+    printf("Fibonacci Series: ");
+
+    // 记录开始时间
+    clock_t start = clock();
+    // 循环输出斐波那契数列
+    for (i = 1; i <= n; ++i) {
+        // 输出斐波那契数列的值
+        printf("%lld, ", t1);
+        // 计算下一个斐波那契数列的值
+        nextTerm = t1 + t2;
+        // 更新t1和t2的值
+        t1 = t2;
+        t2 = nextTerm;
+    }
+    // 记录结束时间
+    clock_t end = clock();
+
+    // 计算程序运行的时间
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    // 输出程序运行的时间
+    printf("\nTime taken: %f seconds\n", time_spent);
+
+    return 0;
+}
+```
+
+编译运行后得到结果如下：
+```Bash
+Fibonacci Series: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 832040, 1346269, 2178309, 3524578, 5702887, 9227465, 14930352, 24157817, 39088169, 63245986, 102334155, 165580141, 267914296, 433494437, 701408733, 1134903170, 1836311903, 2971215073, 4807526976, 7778742049, 12586269025, 20365011074, 32951280099, 53316291173, 86267571272, 139583862445, 225851433717, 365435296162, 591286729879, 956722026041, 1548008755920, 2504730781961, 4052739537881, 6557470319842, 10610209857723, 17167680177565, 27777890035288, 44945570212853, 72723460248141, 117669030460994, 190392490709135, 308061521170129, 498454011879264, 806515533049393, 1304969544928657, 2111485077978050, 3416454622906707, 5527939700884757, 8944394323791464, 14472334024676221, 23416728348467685, 37889062373143906, 61305790721611591, 99194853094755497, 160500643816367088, 259695496911122585, 420196140727489673, 679891637638612258, 1100087778366101931, 1779979416004714189, 2880067194370816120, 4660046610375530309, 7540113804746346429, -6246583658587674878, 1293530146158671551, -4953053512429003327, -3659523366270331776, -8612576878699335103, 6174643828739884737, -2437933049959450366,
+Time taken: 0.007000 seconds
+```
+可见还是溢出了，7540113804746346429 以后的都变成负数了。
+
+4660046610375530309 和 7540113804746346429 两个数相加的结果是 12200160415121876738。
+这个结果超出了 long long 类型的范围，因为 long long 类型的范围通常是 -9,223,372,036,854,775,808 到 9,223,372,036,854,775,807。
+如果想在 C 语言中处理更大的整数，可以使用 GMP（GNU Multiple Precision Arithmetic Library）等高精度计算库来处理更大的整数。
+
+
+
+## 16.2 数组越界
+
+如果内存中有连续的两个数组，一旦越界，就可能导致错误赋值。
+
+```C
+// 数组越界赋值
+#include <stdio.h>
+
+struct my_struct {
+    int arr1[5];
+    int arr2[5];
+};
+
+int main() {
+    // 定义一个结构体变量s，其中arr1和arr2分别是一个长度为5的数组
+    struct my_struct s = {{1, 2, 3, 4, 5}, {6, 7, 8, 9, 10}};
+    int i;
+    // 将arr1中的每一个元素都置为0
+    for (i = 0; i <= 5; i++) {
+        s.arr1[i] = 0;
+    }
+    // 遍历arr1，打印每一个元素
+    for (i = 0; i < 5; i++) {
+        printf("%d ", s.arr1[i]);
+    }
+    printf("\n");
+    // 遍历arr2，打印每一个元素
+    for (i = 0; i < 5; i++) {
+        printf("%d ", s.arr2[i]);
+    }
+    return 0;
+}
+```
+
+## 16.3 缓冲区溢出攻击
+
+```C
+// 缓冲区溢出攻击
+#include <stdio.h>
+#include <string.h>
+
+struct user {
+    char name[5];
+    char email[10];
+};
+
+int main() {
+    // 定义一个struct类型的变量u
+    struct user u;
+    // 打印提示信息，让用户输入名字
+    printf("Enter your name: ");
+    // 使用gets函数获取用户输入的名字，并赋值给u.name
+    gets(u.name);
+    // 打印提示信息，让用户输入邮箱
+    printf("Enter your email: ");
+    // 使用gets函数获取用户输入的邮箱，并赋值给u.email
+    gets(u.email);
+    // 打印出用户输入的名字和邮箱
+    printf("Hello, %s \n", u.name);
+    printf("Your email is %s.\n",u.email);
+    return 0;
+}
+```
+
+```Bash
+Enter your name: hello
+Enter your email: halo@halo.org
+Hello, hellohalo@halo.org
+Your email is halo@halo.org.
+```
+
+
+## 16.4 避免缓冲区溢出
+
+使用`fgets`替换掉`gets`，可以有效避免缓冲区攻击：
+
+```C
+#include <stdio.h>
+#include <string.h>
+
+struct user {
+    char name[5];
+    char email[10];
+};
+
+int main() {
+    // 定义一个struct类型的变量u
+    struct user u;
+    // 打印提示信息，让用户输入名字
+    printf("Enter your name: ");
+    // 使用fgets函数获取用户输入的名字，并赋值给u.name
+    fgets(u.name, sizeof(u.name), stdin);
+    // 打印提示信息，让用户输入邮箱
+    printf("Enter your email: ");
+    // 使用fgets函数获取用户输入的邮箱，并赋值给u.email
+    fgets(u.email, sizeof(u.email), stdin);
+    // 打印出用户输入的名字和邮箱
+    printf("Hello, %s \n", u.name);
+    printf("Your email is %s.\n",u.email);
+    return 0;
+}
+```
