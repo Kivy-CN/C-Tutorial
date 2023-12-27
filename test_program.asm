@@ -1,68 +1,32 @@
 section .data
-    num1 db '10', 0
-    num2 db '20', 0
-    result db 0, 0, 0 ; Initialize result to 0
-    plus db '+', 0
-    equals db '=', 0
-    newline db 0xA
+    a db 10
+    b db 20
+    result db 0
 
 section .text
     global _start
 
 _start:
-    ; print num1
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, num1
-    mov edx, 2
-    int 0x80
-
-    ; print plus
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, plus
-    mov edx, 1
-    int 0x80
-
-    ; print num2
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, num2
-    mov edx, 2
-    int 0x80
-
-    ; print equals
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, equals
-    mov edx, 1
-    int 0x80
-
-    ; calculate result
-    mov eax, [num1]
-    sub eax, '0' ; convert ASCII digit to integer
-    mov ebx, [num2]
-    sub ebx, '0' ; convert ASCII digit to integer
-    add eax, ebx
-    add eax, '0' ; convert integer to ASCII digit
-    mov [result], eax
-    add result, '0' ; convert integer to ASCII digit
-
-    ; print result
+    ; 将变量a的值存入寄存器AL
+    mov al, byte [a]
+    
+    ; 将变量b的值存入寄存器BL
+    mov bl, byte [b]
+    
+    ; 将寄存器AL和BL相加，并将结果存入寄存器AL
+    add al, bl
+    
+    ; 将寄存器AL的值存入变量result
+    mov byte [result], al
+    
+    ; 调用系统调用，打印输出结果
     mov eax, 4
     mov ebx, 1
     mov ecx, result
     mov edx, 1
     int 0x80
     
-    ; print newline
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, newline
-    mov edx, 1
-    int 0x80
-
-    ; exit
+    ; 退出程序
     mov eax, 1
     xor ebx, ebx
     int 0x80
