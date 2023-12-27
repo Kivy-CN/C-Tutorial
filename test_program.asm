@@ -3,6 +3,7 @@ section .data
     b db 20
     result db 0
     output db "The result is: ", 0
+    buffer db 0
 
 section .text
     global _start
@@ -20,6 +21,11 @@ _start:
     ; 将寄存器AL的值存入变量result
     mov byte [result], al
     
+    ; 将结果转换为字符形式并存储在缓冲区中
+    mov ah, 0
+    add al, '0'
+    mov byte [buffer], al
+    
     ; 打印输出结果前的字符串
     mov eax, 4
     mov ebx, 1
@@ -30,7 +36,7 @@ _start:
     ; 打印输出结果
     mov eax, 4
     mov ebx, 1
-    mov ecx, result
+    mov ecx, buffer
     mov edx, 1
     int 0x80
     
