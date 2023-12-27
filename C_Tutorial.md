@@ -49,39 +49,84 @@ chmod +x test_program
 
 ```ASM
 section .data
-    // 定义变量num1，类型为双字，值为10
-    num1 dd 10
-    // 定义变量num2，类型为双字，值为20
-    num2 dd 20
+    num1 db '10', 0
+    num2 db '20', 0
+    result db 0, 0, 0 ; Initialize result to 0
+    plus db '+', 0
+    equals db '=', 0
+    newline db 0xA
 
 section .text
-    // 定义全局变量_start
     global _start
 
 _start:
-    // 将num1的值赋给eax
+    ; print num1
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, num1
+    mov edx, 2
+    int 0x80
+
+    ; print plus
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, plus
+    mov edx, 1
+    int 0x80
+
+    ; print num2
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, num2
+    mov edx, 2
+    int 0x80
+
+    ; print equals
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, equals
+    mov edx, 1
+    int 0x80
+
+    ; calculate result
     mov eax, [num1]
-    // 将num2的值加到eax上
-    add eax, [num2]
-    // 将eax的值赋给num1
-    mov [num1], eax
-    // 将eax的值赋为1
+    sub eax, '0' ; convert ASCII digit to integer
+    mov ebx, [num2]
+    sub ebx, '0' ; convert ASCII digit to integer
+    add eax, ebx
+    add eax, '0' ; convert integer to ASCII digit
+    mov [result], eax
+    add result, '0' ; convert integer to ASCII digit
+
+    ; print result
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, result
+    mov edx, 1
+    int 0x80
+    
+    ; print newline
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, newline
+    mov edx, 1
+    int 0x80
+
+    ; exit
     mov eax, 1
-    // 将ebx的值赋为0
     xor ebx, ebx
-    // 调用int 0x80，执行系统调用
     int 0x80
 ```
-将上面的代码存储成一个名为`test_program.asm`的文件，然后使用`nasm`命令将其编译成机器语言：
+将上面的代码中所有注释删除掉，然后存储成一个名为`test_program.asm`的文件，然后使用`nasm`命令将其编译成机器语言：
 
 ```bash
 nasm -f elf test_program.asm -o test_program.o
 ```
 
-最后，使用`ld`命令将编译后的机器语言文件链接成一个可执行文件：
+再使用`ld`命令将编译后的机器语言文件链接成一个可执行文件：
 
 ```bash
-ld test_program.o -o test_program
+ld -m elf_i386 test_program.o -o test_program
 ```
 现在，你可以运行这个可执行文件了：
 
