@@ -2,6 +2,7 @@ section .data
     a db 10
     b db 20
     result db 0
+    output db "The result is: ", 0
 
 section .text
     global _start
@@ -19,7 +20,14 @@ _start:
     ; 将寄存器AL的值存入变量result
     mov byte [result], al
     
-    ; 调用系统调用，打印输出结果
+    ; 打印输出结果前的字符串
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, output
+    mov edx, 15
+    int 0x80
+    
+    ; 打印输出结果
     mov eax, 4
     mov ebx, 1
     mov ecx, result
