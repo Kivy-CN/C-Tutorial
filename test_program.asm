@@ -19,7 +19,7 @@ _start:
     mov eax, 4
     mov ebx, 1
     mov ecx, result
-    mov edx, 7
+    mov edx, 11
     int 0x80
 
     ; Exit the program
@@ -28,4 +28,4 @@ _start:
     int 0x80
 
 section .data
-    result db '      ', 0
+    result db '      =      ', 0
