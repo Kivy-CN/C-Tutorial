@@ -1,32 +1,31 @@
 section .data
-    result db "Result: %d", 0
+    message db '1 + 2 = 3', 0
 
 section .text
     global _start
 
 _start:
-    ; 计算10 + 20
-    mov eax, 10
-    add eax, 20
+    ; Add 1 and 2
+    mov eax, 1
+    add eax, 2
 
-    ; 将结果转换为字符串
-    mov ebx, 10
-    xor ecx, ecx
-    mov edi, 10
-    mov esi, result
-    call itoa
+    ; Convert the result to ASCII characters
+    add eax, '0'
+    mov [result+2], al
+    mov byte [result+1], '+'
+    mov byte [result], '1'
 
-    ; 将结果打印到终端命令行
+    ; Print the result
     mov eax, 4
     mov ebx, 1
     mov ecx, result
-    mov edx, 10
+    mov edx, 7
     int 0x80
 
-    ; 退出程序
+    ; Exit the program
     mov eax, 1
     xor ebx, ebx
     int 0x80
 
 section .data
-    extern itoa
+    result db '      ', 0
