@@ -47,39 +47,42 @@ chmod +x test_program
 
 下面是一个简单的汇编程序，它将两个数相加并将结果存储在第一个数中：
 
-```ASM
+```Assembly
 section .data
-    a db 10
-    b db 20
-    result db 0
+    message db '1 + 2 = ', 0     ; 定义消息内容，初始值为 '1 + 2 = '
+    result db 0                 ; 定义结果变量，初始值为 0
+    len equ $-message           ; 计算消息内容的长度
 
 section .text
     global _start
 
 _start:
-    ; 将变量a的值存入寄存器AL
-    mov al, byte [a]
-    
-    ; 将变量b的值存入寄存器BL
-    mov bl, byte [b]
-    
-    ; 将寄存器AL和BL相加，并将结果存入寄存器AL
-    add al, bl
-    
-    ; 将寄存器AL的值存入变量result
-    mov byte [result], al
-    
-    ; 调用系统调用，打印输出结果
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, result
-    mov edx, 1
-    int 0x80
-    
-    ; 退出程序
-    mov eax, 1
-    xor ebx, ebx
-    int 0x80
+    ; 设置方程式
+    mov eax, 1                 ; 将 1 压入寄存器 eax
+    add eax, 2                 ; 将 eax 的值与 2 相加
+    mov byte [result], al      ; 将结果存储在 result 变量中
+
+    ; 打印方程式
+    mov edx, len              ; 将消息内容的长度存储在 edx 寄存器
+    mov ecx, message          ; 将消息内容的地址存储在 ecx 寄存器
+    mov ebx, 1                ; 将标准输出的文件描述符 1（stdout）存储在 ebx 寄存器
+    mov eax, 4                ; 将系统调用号 4（写入）存储在 eax 寄存器
+    int 0x80                  ; 发送系统调用
+
+    ; 将结果转换为可打印字符
+    add byte [result], '0'     ; 将结果变量的值加 48（字符 '0' 的ASCII码）
+
+    ; 打印结果
+    mov edx, 1                ; 将结果变量的长度存储在 edx 寄存器
+    mov ecx, result           ; 将结果变量的地址存储在 ecx 寄存器
+    mov ebx, 1                ; 将标准输出的文件描述符 1（stdout）存储在 ebx 寄存器
+    mov eax, 4                ; 将系统调用号 4（写入）存储在 eax 寄存器
+    int 0x80                  ; 发送系统调用
+
+    ; 退出
+    mov eax, 1                ; 将系统调用号 1（退出）存储在 eax 寄存器
+    xor ebx, ebx              ; 将退出状态码清零
+    int 0x80                  ; 发送系统调用
 ```
 将上面的代码存储成一个名为`test_program.asm`的文件，然后使用`nasm`命令将其编译成机器语言：
 
@@ -112,8 +115,8 @@ ld -m elf_i386 test_program.o -o test_program
 #include <stdio.h>
 
 int main() {
-    int num1 = 10;
-    int num2 = 20;
+    int num1 = 1;
+    int num2 = 2;
     num1 += num2;
     printf("%d\n", num1);
     return 0;
@@ -127,8 +130,8 @@ int main() {
 再改写成Python代码如下：
 
 ```Python
-num1 = 10
-num2 = 20
+num1 = 1
+num2 = 2
 num1 += num2
 print(num1)
 ```
