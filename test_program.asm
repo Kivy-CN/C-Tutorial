@@ -37,7 +37,7 @@ _start:
     mov eax, 4
     mov ebx, 1
     mov ecx, buffer
-    mov edx, 1
+    mov edx, 2
     int 0x80
     
     ; 退出程序
