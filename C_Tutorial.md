@@ -2509,6 +2509,17 @@ C语言的内存访问功能是巨大优势，内存访问主要通过指针实�
 
 # 10 结构体、共用体、枚举
 
+在C语言中，基础数据类型和复合数据类型是两种主要的数据类型。
+
+1. 基础数据类型：包括整型（如int）、浮点型（如float）、字符型（如char）等。这些类型是语言内建的，每种类型都有固定的大小和取值范围。
+
+2. 复合数据类型：包括数组、结构体、共用体和枚举等。这些类型是由程序员定义的，可以包含多个数据项，每个数据项可以是基础数据类型或其他复合数据类型。
+
+复合数据类型有更高级的数据组织和抽象能力。
+
+
+
+
 ## 10.1 结构体
 
 结构体是用户自定义的复合数据类型，允许存储不同类型的数据项。
@@ -2628,6 +2639,108 @@ int main()
         printf("枚举元素：%d \n", day);
     }
 }
+```
+
+## 10.4 结构体和共用体的比较
+
+结构体（struct）和共用体（union）都是C语言中的复合数据类型，它们都可以存储不同类型的数据项。然而，它们在数据存储和访问方式上有一些关键的区别：
+
+1. 存储方式：结构体的每个成员都有自己的存储空间，成员之间的存储是并行的。而共用体的所有成员共享同一块存储空间，成员之间的存储是重叠的。
+
+2. 内存占用：结构体的大小至少为其所有成员大小之和（可能更大，因为可能存在内存对齐）。而共用体的大小为其最大成员的大小。
+
+3. 使用方式：结构体的所有成员可以同时使用，而共用体在任何时候只能使用其一。
+
+
+## 10.5 根据需求场景设计和使用复合数据类型
+
+如果一个变量，可能是整数、浮点数或字符串，类型不确定，可以使用共用体来存储它。如果有一个对象，数据结构复杂，比如有年龄、名字和工资等属性，应该使用结构体来存储。
+
+
+```C
+#include <stdio.h>
+
+// 定义一个共用体，用于存储整数、浮点数或字符串
+union Data {
+    int i;
+    float f;
+    char str[20];
+};
+
+// 定义一个结构体，用于存储一个对象的年龄、名字和工资
+struct Person {
+    int age;
+    char name[20];
+    double salary;
+};
+
+int main() {
+    // 创建并初始化一个共用体
+    union Data data;
+    data.i = 10;
+    printf("data.i : %d\n", data.i);
+
+    data.f = 220.5;
+    printf("data.f : %.2f\n", data.f);
+
+    strcpy(data.str, "C Programming");
+    printf("data.str : %s\n", data.str);
+
+    // 创建并初始化一个结构体
+    struct Person person;
+    person.age = 30;
+    strcpy(person.name, "John Doe");
+    person.salary = 4500.50;
+
+    printf("Person age : %d\n", person.age);
+    printf("Person name : %s\n", person.name);
+    printf("Person salary : %.2f\n", person.salary);
+
+    return 0;
+}
+```
+
+## 10.6 复合数据类型的应用与代码注释
+
+在使用复合数据类型（如结构体、联合体、枚举和数组）编程时，需要良好的代码注释，以便其他开发者理解和维护代码。
+
+复合数据类型的注释应遵循以下规则：
+
+1. 数据类型定义：在定义复合数据类型时，应在其上方添加注释，说明这个数据类型的用途和含义。例如：
+
+```c
+// Employee struct represents an employee with a name and salary
+struct Employee {
+    char name[50];
+    int salary;
+};
+```
+
+2. 数据类型成员：对于复合数据类型的每个成员，也应添加注释，说明其用途和含义。例如：
+
+```c
+struct Employee {
+    char name[50]; // Employee's name
+    int salary;    // Employee's salary in USD
+};
+```
+
+3. 函数参数和返回值：如果函数的参数或返回值是复合数据类型，应在函数的注释中说明。例如：
+
+```c
+/**
+ * Calculate the total salary of all employees.
+ * @param employees An array of Employee structs
+ * @param count The number of employees in the array
+ * @return The total salary
+ */
+int calculate_total_salary(struct Employee* employees, int count);
+```
+
+4. 变量声明：在声明复合数据类型的变量时，也应添加注释，说明这个变量的用途。例如：
+
+```c
+struct Employee employee; // The employee to be processed
 ```
 
 
