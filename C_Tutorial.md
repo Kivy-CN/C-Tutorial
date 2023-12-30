@@ -2916,6 +2916,36 @@ int main ()
    return 0;
 }
 ```
+
+## 11.4 函数参数列表维护和功能变更记录
+
+
+在C语言中，函数参数列表的维护和功能变更记录，需要遵循以下规则：
+
+1. 函数参数列表维护：当函数的参数列表需要变更时，应确保所有调用该函数的地方都进行了相应的修改。否则，可能会导致编译错误或运行时错误。此外，应尽量保持函数参数列表的简洁，避免过长的参数列表，这会使函数调用变得复杂。
+
+2. 功能变更记录：当函数的功能发生变更时，应在函数的注释中记录下变更的内容、变更的原因以及变更的日期。这有助于其他开发者理解这个函数的历史和变化。
+
+```c
+/**
+ * Calculate the total salary of all employees.
+ * @param employees An array of Employee structs
+ * @param count The number of employees in the array
+ * @return The total salary
+ *
+ * Change Log:
+ * 2022-01-01: Created by Author.
+ * 2022-02-01: Updated by Author, added tax calculation.
+ */
+int calculate_total_salary(struct Employee* employees, int count);
+```
+
+3. 版本控制：使用版本控制系统（如Git）可以帮助跟踪函数的变更记录，包括谁做了变更、何时做的变更以及为什么做的变更。
+
+4. 测试：每次函数的参数列表或功能发生变更后，都应进行充分的测试，以确保函数的正确性。
+
+
+
 # 12 数值排序
 
 数值排序有很多种方法，本章只介绍一些简单的。
