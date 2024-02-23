@@ -2,6 +2,7 @@ section .data
     message db '1 + 2 = ', 0     ; 定义消息内容，初始值为 '1 + 2 = '
     result db 0                 ; 定义结果变量，初始值为 0
     len equ $-message           ; 计算消息内容的长度
+    newline db 0xA              ; 定义换行符
 
 section .text
     global _start
@@ -25,6 +26,13 @@ _start:
     ; 打印结果
     mov edx, 1                ; 将结果变量的长度存储在 edx 寄存器
     mov ecx, result           ; 将结果变量的地址存储在 ecx 寄存器
+    mov ebx, 1                ; 将标准输出的文件描述符 1（stdout）存储在 ebx 寄存器
+    mov eax, 4                ; 将系统调用号 4（写入）存储在 eax 寄存器
+    int 0x80                  ; 发送系统调用
+
+    ; 打印换行符
+    mov edx, 1                ; 将换行符的长度存储在 edx 寄存器
+    mov ecx, newline          ; 将换行符的地址存储在 ecx 寄存器
     mov ebx, 1                ; 将标准输出的文件描述符 1（stdout）存储在 ebx 寄存器
     mov eax, 4                ; 将系统调用号 4（写入）存储在 eax 寄存器
     int 0x80                  ; 发送系统调用
