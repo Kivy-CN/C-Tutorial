@@ -1,127 +1,130 @@
-#include <ncurses.h> // Include the ncurses library for terminal-based user interfaces
-#include <stdlib.h> // Include the standard library for general purpose functions
+// sudo apt-get install libncurses5-dev libncursesw5-dev
+// gcc game.c -o game -lncurses
 
-typedef enum { UP, DOWN, LEFT, RIGHT } Direction; // Define an enumeration for the four possible directions
+#include <ncurses.h> // 包含ncurses库，用于终端用户界面
+#include <stdlib.h> // 包含标准库，用于通用函数
 
-// Define a struct for the snake
+typedef enum { UP, DOWN, LEFT, RIGHT } Direction; // 定义四个可能的方向的枚举
+
+// 定义蛇的结构体
 typedef struct Snake {
-    int x, y; // The x and y coordinates of the snake
-    int speed; // The speed of the snake
-    Direction direction; // The direction the snake is moving in
-    struct Snake *next; // A pointer to the next segment of the snake
+    int x, y; // 蛇的x和y坐标
+    int speed; // 蛇的速度
+    Direction direction; // 蛇移动的方向
+    struct Snake *next; // 指向蛇的下一段的指针
 } Snake;
 
-Snake *snake_head; // A pointer to the head of the snake
-int score; // The player's score
-struct { int x, y; } food; // The x and y coordinates of the food
+Snake *snake_head; // 指向蛇头的指针
+int score; // 玩家的分数
+struct { int x, y; } food; // 食物的x和y坐标
 
 /**
- * Initializes the game.
- * Sets up the screen, snake, score, and food.
+ * 初始化游戏。
+ * 设置屏幕，蛇，分数和食物。
  */
 void initialize() {
-    initscr(); // Initialize the screen
-    cbreak(); // Disable line buffering
-    noecho(); // Don't echo user input
-    curs_set(0); // Hide the cursor
-    keypad(stdscr, TRUE); // Enable special keys
-    timeout(300); // Set a timeout for user input
+    initscr(); // 初始化屏幕
+    cbreak(); // 禁用行缓冲
+    noecho(); // 不回显用户输入
+    curs_set(0); // 隐藏光标
+    keypad(stdscr, TRUE); // 启用特殊键
+    timeout(300); // 设置用户输入的超时时间
 
-    // Initialize the snake
-    snake_head = malloc(sizeof(Snake)); // Allocate memory for the snake
-    snake_head->x = COLS / 2; // Set the initial x coordinate of the snake
-    snake_head->y = LINES / 2; // Set the initial y coordinate of the snake
-    snake_head->speed = 1; // Set the initial speed of the snake
-    snake_head->direction = RIGHT; // Set the initial direction of the snake
-    snake_head->next = NULL; // The snake has no other segments yet
+    // 初始化蛇
+    snake_head = malloc(sizeof(Snake)); // 为蛇分配内存
+    snake_head->x = COLS / 2; // 设置蛇的初始x坐标
+    snake_head->y = LINES / 2; // 设置蛇的初始y坐标
+    snake_head->speed = 1; // 设置蛇的初始速度
+    snake_head->direction = RIGHT; // 设置蛇的初始方向
+    snake_head->next = NULL; // 蛇还没有其他段
 
-    score = 0; // Initialize the score
-    food.x = rand() % COLS; // Set the initial x coordinate of the food
-    food.y = rand() % LINES; // Set the initial y coordinate of the food
+    score = 0; // 初始化分数
+    food.x = rand() % COLS; // 设置食物的初始x坐标
+    food.y = rand() % LINES; // 设置食物的初始y坐标
 }
 
 /**
- * Draws the game screen.
- * Clears the screen, prints the score, snake, and food.
+ * 绘制游戏屏幕。
+ * 清屏，打印分数，蛇和食物。
  */
 void draw() {
-    clear(); // Clear the screen
-    mvprintw(0, 0, "Score: %d", score); // Print the score at the top left corner of the screen
+    clear(); // 清屏
+    mvprintw(0, 0, "Score: %d", score); // 在屏幕的左上角打印分数
 
-    // Print the snake
-    Snake *temp = snake_head; // Start with the head of the snake
-    while (temp) { // While there are more segments of the snake
-        mvprintw(temp->y, temp->x, "O"); // Print the current segment of the snake
-        temp = temp->next; // Move on to the next segment of the snake
+    // 打印蛇
+    Snake *temp = snake_head; // 从蛇头开始
+    while (temp) { // 当还有蛇的段时
+        mvprintw(temp->y, temp->x, "O"); // 打印蛇的当前段
+        temp = temp->next; // 移动到蛇的下一段
     }
 
-    mvprintw(food.y, food.x, "X"); // Print the food
-    refresh(); // Refresh the screen to show the new state
+    mvprintw(food.y, food.x, "X"); // 打印食物
+    refresh(); // 刷新屏幕以显示新状态
 }
 
 /**
- * Updates the game state.
- * Handles user input, moves the snake, checks for collisions, and updates the score.
+ * 更新游戏状态。
+ * 处理用户输入，移动蛇，检查碰撞，更新分数。
  */
 void update() {
-    int ch = getch(); // Get the user's input
-    Snake *new_head = malloc(sizeof(Snake)); // Allocate memory for a new head of the snake
-    new_head->next = snake_head; // The new head's next segment is the old head
-    new_head->speed = snake_head->speed; // The new head has the same speed as the old head
-    new_head->direction = snake_head->direction; // The new head starts off with the same direction as the old head
+    int ch = getch(); // 获取用户的输入
+    Snake *new_head = malloc(sizeof(Snake)); // 为蛇的新头分配内存
+    new_head->next = snake_head; // 新头的下一段是旧头
+    new_head->speed = snake_head->speed; // 新头的速度与旧头相同
+    new_head->direction = snake_head->direction; // 新头开始时的方向与旧头相同
 
-    // Change the direction of the new head based on the user's input
+    // 根据用户的输入改变新头的方向
     if (ch == KEY_LEFT) new_head->direction = LEFT;
     else if (ch == KEY_RIGHT) new_head->direction = RIGHT;
     else if (ch == KEY_UP) new_head->direction = UP;
     else if (ch == KEY_DOWN) new_head->direction = DOWN;
 
-    // Move the new head in the correct direction
+    // 让新头朝正确的方向移动
     if (new_head->direction == LEFT) new_head->x = snake_head->x - new_head->speed, new_head->y = snake_head->y;
     else if (new_head->direction == RIGHT) new_head->x = snake_head->x + new_head->speed, new_head->y = snake_head->y;
     else if (new_head->direction == UP) new_head->x = snake_head->x, new_head->y = snake_head->y - new_head->speed;
     else if (new_head->direction == DOWN) new_head->x = snake_head->x, new_head->y = snake_head->y + new_head->speed;
 
-    // Check if the new head has collided with the food
+    // 检查新头是否与食物碰撞
     if (new_head->x == food.x && new_head->y == food.y) {
-        score++; // Increase the score
-        food.x = rand() % COLS; // Move the food to a new random location
-        food.y = rand() % LINES; // Move the food to a new random location
-        timeout(300 / snake_head->speed); // Decrease the timeout based on the speed of the snake
+        score++; // 增加分数
+        food.x = rand() % COLS; // 将食物移动到新的随机位置
+        food.y = rand() % LINES; // 将食物移动到新的随机位置
+        timeout(300 / snake_head->speed); // 根据蛇的速度减少超时时间
 
-        // Add a new segment to the tail of the snake
-        Snake *temp = snake_head; // Start with the head of the snake
-        while (temp->next) temp = temp->next; // Find the tail of the snake
-        Snake *new_tail = malloc(sizeof(Snake)); // Allocate memory for a new tail
-        new_tail->x = temp->x; // The new tail has the same x coordinate as the old tail
-        new_tail->y = temp->y; // The new tail has the same y coordinate as the old tail
-        new_tail->next = NULL; // The new tail has no next segment
-        temp->next = new_tail; // The old tail's next segment is the new tail
+        // 在蛇的尾部添加新段
+        Snake *temp = snake_head; // 从蛇头开始
+        while (temp->next) temp = temp->next; // 找到蛇的尾部
+        Snake *new_tail = malloc(sizeof(Snake)); // 为新尾部分配内存
+        new_tail->x = temp->x; // 新尾部的x坐标与旧尾部相同
+        new_tail->y = temp->y; // 新尾部的y坐标与旧尾部相同
+        new_tail->next = NULL; // 新尾部没有下一段
+        temp->next = new_tail; // 旧尾部的下一段是新尾部
     } else {
-        // Remove the tail of the snake
-        Snake *temp = snake_head; // Start with the head of the snake
-        while (temp->next && temp->next->next) temp = temp->next; // Find the second to last segment of the snake
-        if (temp->next) { // If there is a last segment
-            free(temp->next); // Free the memory of the last segment
-            temp->next = NULL; // The second to last segment is now the last segment
+        // 移除蛇的尾部
+        Snake *temp = snake_head; // 从蛇头开始
+        while (temp->next && temp->next->next) temp = temp->next; // 找到蛇的倒数第二段
+        if (temp->next) { // 如果有最后一段
+            free(temp->next); // 释放最后一段的内存
+            temp->next = NULL; // 倒数第二段现在是最后一段
         }
     }
 
-    snake_head = new_head; // The new head is now the head of the snake
+    snake_head = new_head; // 新头现在是蛇的头
 }
 
 /**
- * The main function of the game.
- * Initializes the game and runs the game loop.
+ * 游戏的主函数。
+ * 初始化游戏并运行游戏循环。
  */
 int main() {
-    initialize(); // Initialize the game
+    initialize(); // 初始化游戏
 
-    while (1) { // Game loop
-        draw(); // Draw the game state
-        update(); // Update the game state
+    while (1) { // 游戏循环
+        draw(); // 绘制游戏状态
+        update(); // 更新游戏状态
     }
 
-    endwin(); // End the window
-    return 0; // Exit the program
+    endwin(); // 结束窗口
+    return 0; // 退出程序
 }

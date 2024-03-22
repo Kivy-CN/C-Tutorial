@@ -1,3 +1,6 @@
+// sudo apt-get install libncurses5-dev libncursesw5-dev
+// gcc 5.1.c -o game -lncurses
+
 #include <ncurses.h> // Include the ncurses library for terminal-based user interfaces
 #include <stdlib.h> // Include the standard library for general purpose functions
 
