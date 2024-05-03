@@ -40,7 +40,7 @@ int main()
         printf("k (%d) ", k);
         k++;
         printf("++ = %d\n", k);
-
+        printf("C = %c\n", c);
     } 
     while (c <= 'F');
     printf("Finally k now %d\n", k);
