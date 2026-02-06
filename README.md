@@ -96,6 +96,8 @@ Visual Studio Code 配合 **clangd** 插件可以提供代码补全和错误检�
 
 ### 3.1 代码示例
 
+📄 **完整代码**: [hello_world.c](codes/03_structure/hello_world.c)
+
 ```c
 /* file: hello.c */
 #include <stdio.h>  // 包含标准输入输出头文件
@@ -154,3 +156,110 @@ main:
 *   **参数传递**：根据 System V ABI，前几个参数通过寄存器传递（RDI 存放第一个参数）。
 *   **函数调用**：`callq` 指令用于跳转到目标函数。
 *   **返回值**：`xorl %eax, %eax` 等同于将 EAX 设为 0，对应 `return 0`。
+
+---
+
+## 4. 数据类型与二进制表示
+
+C 语言提供了多种基础数据类型，理解它们在内存中的二进制表示对于底层编程至关重要。
+
+📄 **代码示例**: [binary_representation.c](codes/04_types/binary_representation.c)
+
+### 4.1 核心知识点
+*   **整数类型**: `char`, `short`, `int`, `long`, `long long` 及其 `unsigned` 变体。
+*   **补码表示**: 负数在计算机中通常使用补码存储。
+*   **浮点数**: `float` (单精度) 和 `double` (双精度) 遵循 IEEE 754 标准，存在精度限制。
+
+---
+
+## 5. 流程控制与分支预测
+
+除了基本的 `if-else` 和循环结构，现代编译器和 CPU 还支持分支预测优化。
+
+📄 **代码示例**: [branch_prediction.c](codes/05_flow/branch_prediction.c)
+
+### 5.1 核心知识点
+*   **控制流**: `if`, `switch`, `for`, `while`, `do-while`.
+*   **分支预测**: CPU 尝试预测条件跳转的方向以提升流水线效率。
+*   **编译器提示**: 使用 `__builtin_expect` (或 `likely`/`unlikely` 宏) 辅助编译器生成更优化的指令布局。
+
+---
+
+## 6. 指针与内存管理
+
+指针是 C 语言的灵魂，提供了直接操作内存的能力，但也带来了内存泄漏和越界的风险。
+
+📄 **代码示例**: [memory_magic.c](codes/06_pointers/memory_magic.c)
+
+### 6.1 核心知识点
+*   **指针基础**: 地址运算符 `&` 和解引用运算符 `*`。
+*   **数组与指针**: 数组名在大多数表达式中退化为指向首元素的指针。
+*   **堆内存管理**: `malloc`, `calloc`, `realloc` 和 `free`。
+*   **常见错误**: 悬空指针 (Dangling Pointer)、内存泄漏 (Memory Leak)、双重释放 (Double Free)。
+
+---
+
+## 7. 函数与调用约定
+
+理解函数调用的栈帧结构有助于掌握递归、参数传递以及调试技巧。
+
+📄 **代码示例**: [stack_and_call.c](codes/07_functions/stack_and_call.c)
+
+### 7.1 核心知识点
+*   **参数传递**: C 语言默认按值传递 (Pass by Value)，通过指针实现按引用传递的效果。
+*   **栈帧 (Stack Frame)**: 每次函数调用在栈上分配的空间，存储返回地址、参数和局部变量。
+*   **静态变量**: `static` 局部变量存储在全局数据区，生命周期贯穿整个程序。
+
+---
+
+## 8. 结构体与联合体
+
+结构体用于自定义复合数据类型，而联合体允许在同一内存位置存储不同类型的数据。
+
+📄 **代码示例**: [memory_alignment.c](codes/08_structs/memory_alignment.c)
+
+### 8.1 核心知识点
+*   **内存对齐 (Alignment)**: 编译器为提高访问效率，会在结构体成员间插入填充字节 (Padding)。
+*   **联合体 (Union)**: 所有成员共享同一块内存，修改一个成员会影响其他成员。
+*   **位域 (Bit Fields)**: 允许在结构体中指定成员占用的位数，用于节省空间或硬件寄存器映射。
+
+---
+
+## 9. 文件输入输出
+
+C 标准库提供了基于流 (Stream) 的文件操作接口。
+
+📄 **代码示例**: [file_handler.c](codes/09_io/file_handler.c)
+
+### 9.1 核心知识点
+*   **文件指针**: `FILE *` 类型。
+*   **打开模式**: "r" (只读), "w" (写入), "a" (追加), "b" (二进制模式)。
+*   **读写函数**:
+    *   文本: `fprintf`, `fscanf`, `fgets`, `fputs`.
+    *   二进制: `fread`, `fwrite`.
+
+---
+
+## 10. C 与 Python 混合编程
+
+利用 C 语言的高性能和 Python 的易用性，通过动态链接库实现混合编程。
+
+📄 **代码示例**: [clib_math.c](codes/10_python_c/clib_math.c) (C 库) | [call_clib.py](codes/10_python_c/call_clib.py) (Python 调用)
+
+### 10.1 核心知识点
+*   **动态库编译**: Windows (`.dll`), Linux/macOS (`.so`)。
+*   **ctypes**: Python 标准库，用于加载外部库并调用其函数。
+*   **类型映射**: 需要处理 C 类型 (如 `int`, `char *`) 与 Python 类型之间的转换。
+
+---
+
+## 11. 程序安全与检测
+
+C 语言的灵活性容易导致缓冲区溢出等安全漏洞，现代工具链提供了有效的检测手段。
+
+📄 **代码示例**: [safety_check.c](codes/11_security/safety_check.c)
+
+### 11.1 核心知识点
+*   **缓冲区溢出 (Buffer Overflow)**: 向缓冲区写入超过其容量的数据，覆盖相邻内存。
+*   **危险函数**: 避免使用 `strcpy`, `gets`, `sprintf`，推荐 `strncpy`, `fgets`, `snprintf`。
+*   **AddressSanitizer (ASan)**: Clang/GCC 提供的运行时内存错误检测工具 (`-fsanitize=address`)。
